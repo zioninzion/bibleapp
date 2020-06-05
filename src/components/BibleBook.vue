@@ -8,7 +8,7 @@
       <b-button block v-b-toggle:[book.name] variant="info">{{book.name}}</b-button>
       </b-card-header>
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
-       <b-card v-bind:id="book.name" v-for="n in book.chapters" ref="book.name" :key="n" @mouseover="getVerses" v-on:click.passive="displayVerses(book.name)">
+       <b-card v-bind:id="book.name" v-for="n in book.chapters" ref="book.name" :key="n" v-on:mouseover="getVerses(book.name, n)" v-on:click.passive="displayVerses()">
          <b-card-text>{{n}}</b-card-text>
         </b-card>
      <!-- </div> -->
@@ -106,8 +106,8 @@ var bookname;
 
     
  methods:{
-     getVerses(name) {
-  axios.get('https://api.lsm.org/recver.php?String='+name+ '4:2'+'&Out=json')
+     getVerses(name, num) {
+  axios.get('https://api.lsm.org/recver.php?String='+name+num+':2'+'&Out=json')
              .then(response=> (this.verse = response.data.verses[0].text))
   //var myWindow = window.open("", "MsgWindow", "width=200,height=100");
   //  var bookname = myWindow.document.write("<p>This is " +name+this.verse+" I am 200px wide and 100px tall!</p>");
@@ -118,8 +118,8 @@ var bookname;
 
     displayVerses(){
         var myWindow = window.open("", "MsgWindow", "width=200,height=100");
-       myWindow.document.write("<p>This is " +bookname+" I am 200px wide and 100px tall!</p>");
-        
+        myWindow.document.write("<p>This is " +bookname+" I am 200px wide and 100px tall!</p>");
+        myWindow.document.close(); 
     }
 }
 
