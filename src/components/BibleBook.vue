@@ -5,10 +5,10 @@
       <b-card-header header-tag="header" class="p-1" role="tab">
       <!--Used v-b-toogle with Vue dynamic argument to grab the specific id of each card.
          This ensures that only one card changes toggle state from visibile to invisible -->  
-      <b-button block v-b-toggle:[book.name] variant="info">{{book.name}}</b-button>
+      <b-button block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name)" variant="info">{{book.name}}</b-button>
       </b-card-header>
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
-       <b-card v-bind:id="book.name" v-for="n in book.chapters" ref="book.name" :key="n" v-on:mouseover="getVerses(book.name, n)" v-on:click.passive="displayVerses()">
+       <b-card v-bind:id="book.name" v-for="n in book.chapters" ref="book.name" :key="n" v-on:click.passive="getVerses(n)">
          <b-card-text>{{n}}</b-card-text>
         </b-card>
      <!-- </div> -->
@@ -20,6 +20,7 @@
 
 <script>
 const axios = require("axios");
+    var verseText;
 var bookname;
   export default {
     data() {
@@ -106,44 +107,75 @@ var bookname;
 
     
  methods:{
-     getVerses(name, num) {
-  axios.get('https://api.lsm.org/recver.php?String='+name+num+':2'+'&Out=json')
-             .then(response=> (this.verse = response.data.verses[0].text))
-  //var myWindow = window.open("", "MsgWindow", "width=200,height=100");
-  //  var bookname = myWindow.document.write("<p>This is " +name+this.verse+" I am 200px wide and 100px tall!</p>");
-    var verseRef = this.verse
-    bookname = name+' '+ verseRef   
-    return bookname
-  },
+  
+    getBook(name){
+        bookname = name
+          console.log(bookname)
+    },
 
-    displayVerses(){
-        var myWindow = window.open("", "MsgWindow", "width=200,height=100");
-        myWindow.document.write("<p>This is " +bookname+" I am 200px wide and 100px tall!</p>");
-        myWindow.document.close(); 
+  getVerses(num) {
+    this.data =[] 
+    axios.get('https://api.lsm.org/recver.php?String='+bookname+num+'&Out=json')
+    
+    // 
+    .then(function(response){
+        
+     verseText = response.data.verses[0].text       
+  //      console.log(verseText) 
+                
+  var myWindow = window.open("", "MsgWindow", "width=200,height=100");
+  myWindow.document.write("<p>This is " +bookname+" "+verseText+"  </p>");
+  myWindow.document.close();
+            })
+           
+/*axios.get('https://api.lsm.org/recver.php?String='+bookname+num+':31-60'+'&Out=json')
+ .then(response=> (
+         verseText = response.data.verses[0].ref  
+       //console.log(response.data.verses[0].ref)
+           
+           ))
+            console.log(verseText)
+ */           
+  } 
+   /* 
+ var rcvverses=this.verse
+    var rcvverses2=this.verse2
+    
+    var verseRef
+    var verseText
+    
+    var i
+    var j
+    
+    for (i=0; i<30; i++)
+    {
+    
+    verseRef = rcvverses.data.verses[i].ref
+    verseText = rcvverses.data.verses[i].text
+     
+    console.log (verseRef+" "+verseText)
     }
-}
+
+    for(j=0; j<30; j++){
+              
+    verseRef = rcvverses2.data.verses[j].ref
+    verseText = rcvverses2.data.verses[j].text
+     
+    console.log (verseRef+" "+verseText)
+    if (verseText.startsWtih("No such verse"))
+    {
+      return
+    }
+
+      
+    }
+    */
+       }
+
+    }
+  
 
 
-
-
-/*      
-methods:{
-     displayVerses(name) {
-               var test = this.verse
-               var myWindow = window.open("", "MsgWindow", "width=200,height=100");
-              myWindow.document.write("<p>This is " +name +test+"</p>");
-            //return bookname
-     }
-
-  },
-
- mounted(){       
-  axios.get('https://api.lsm.org/recver.php?String='+ this.displayVerses(name)+'4:2'+'&Out=json')
-             .then(response=> (this.verse = response.data.verses[0].text))
-          
-     }     
-*/  
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
