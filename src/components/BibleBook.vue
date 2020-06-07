@@ -1,5 +1,6 @@
 <template>
-  <div role="tablist">
+<div role="tablist">
+<Chapter :books="books"/>
        <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
     <b-card no-body class="mb-1" v-for="book in books" :bkey="book.name" v-bind:key="book.name" :chapters="book.chapters">
       <b-card-header header-tag="header" class="p-1" role="tab">
@@ -14,15 +15,18 @@
      <!-- </div> -->
         </b-collapse>
     </b-card>
+
   </div>
 </template>
 
 
 <script>
+import Chapter from "./Chapter";
 const axios = require("axios");
     var verseText;
 var bookname;
   export default {
+    name: "BibleBook",
     data() {
       return {
         verse: null,
@@ -104,7 +108,9 @@ var bookname;
       }
       },
     
-
+ components:{
+        Chapter
+      },
     
  methods:{
   
