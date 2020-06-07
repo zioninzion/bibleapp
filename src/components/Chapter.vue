@@ -1,8 +1,9 @@
 <template>
   <div>
       <b-button block>{{book.name}}</b-button>
-     <v-touch:swipe.left="previousChapter(book.name, n)"  v-touch:swipe.right="nextChapter(book.name, n)"> 
-         <p>{{n}}</p>
+    <!-- <v-touch:swipe.left="previousChapter(book.name, chapterNum)"  v-touch:swipe.right="nextChapter(book.name, chapterNum)"> 
+    -->    
+    <p>{{n}}</p>
     
         
     
@@ -31,7 +32,7 @@ var bookname;
  methods:{
   
 
-  nextChapter(name, num) { 
+  previousChapter(name, num) { 
     axios.get('https://api.lsm.org/recver.php?String='+bookname+num+'&Out=json')
     .then(function(response){
      verseText = response.data.verses[0].text       

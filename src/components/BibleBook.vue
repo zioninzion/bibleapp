@@ -9,8 +9,8 @@
       <b-button block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name)" variant="info">{{book.name}}</b-button>
       </b-card-header>
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
-       <b-card v-bind:id="book.name" v-for="n in book.chapters" ref="book.name" :key="n" v-on:click.passive="getVerses(n)">
-         <b-card-text>{{n}}</b-card-text>
+       <b-card v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number)">
+         <b-card-text>{{number}}</b-card-text>
         </b-card>
      <!-- </div> -->
         </b-collapse>
@@ -29,10 +29,8 @@ var bookname;
     name: "BibleBook",
     data() {
       return {
-        verse: null,
        
-        props:['bkey'],
-       n: 1,  
+       chapterNum: 0,  
        books: 
       [
         {name: "Genesis", chapters: 50}, 
@@ -120,18 +118,16 @@ var bookname;
     },
 
   getVerses(num) {
-    this.data =[] 
+//    this.data =[] 
+      this.chapterNum = num 
+     console.log(this.chapterNum) 
     axios.get('https://api.lsm.org/recver.php?String='+bookname+num+'&Out=json')
     
     // 
     .then(function(response){
         
      verseText = response.data.verses[0].text       
-  //      console.log(verseText) 
-                
-  var myWindow = window.open("", "MsgWindow", "width=200,height=100");
-  myWindow.document.write("<p>This is " +bookname+" "+verseText+"  </p>");
-  myWindow.document.close();
+     console.log(verseText) 
             })
            
 /*axios.get('https://api.lsm.org/recver.php?String='+bookname+num+':31-60'+'&Out=json')
