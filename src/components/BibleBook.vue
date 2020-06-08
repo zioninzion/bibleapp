@@ -1,9 +1,10 @@
 <template>
 <div role="tablist">
-<Chapter :books="books"/>
-       <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
+<Chapter :verseText="verseText"/>
+      
+<!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
     <b-card no-body class="mb-1" v-for="book in books" :bkey="book.name" v-bind:key="book.name" :chapters="book.chapters">
-      <b-card-header header-tag="header" class="p-1" role="tab">
+      <b-card-header header-tag="header" class="p-1" role="tab"> 
       <!--Used v-b-toogle with Vue dynamic argument to grab the specific id of each card.
          This ensures that only one card changes toggle state from visibile to invisible -->  
       <b-button block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name)" variant="info">{{book.name}}</b-button>
@@ -11,8 +12,8 @@
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
        <b-card v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number)">
          <b-card-text>{{number}}</b-card-text>
+         <b-card-text>{{verseText}}</b-card-text>
         </b-card>
-     <!-- </div> -->
         </b-collapse>
     </b-card>
 
@@ -23,13 +24,13 @@
 <script>
 import Chapter from "./Chapter";
 const axios = require("axios");
-    var verseText;
+    
 var bookname;
   export default {
     name: "BibleBook",
     data() {
       return {
-       
+       verseText: 'Hello',   
        chapterNum: 0,  
        books: 
       [
@@ -119,17 +120,20 @@ var bookname;
 
   getVerses(num) {
 //    this.data =[] 
-      this.chapterNum = num 
-     console.log(this.chapterNum) 
+      this.chapterNum = num
+      
+      //this is not bound inside axios.then(function). Assigning this to a variable allows us to refer to data property 
+      var Text = this; 
+      //this.verseText = "Changed"
+        console.log(this.chapterNum) 
     axios.get('https://api.lsm.org/recver.php?String='+bookname+num+'&Out=json')
     
     // 
     .then(function(response){
         
-     verseText = response.data.verses[0].text       
-     console.log(verseText) 
+     Text.verseText = response.data.verses[0].text       
+     console.log(Text.verseText) 
             })
-           
 /*axios.get('https://api.lsm.org/recver.php?String='+bookname+num+':31-60'+'&Out=json')
  .then(response=> (
          verseText = response.data.verses[0].ref  

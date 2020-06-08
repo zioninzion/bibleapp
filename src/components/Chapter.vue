@@ -1,9 +1,9 @@
 <template>
   <div>
-      <b-button block>{{book.name}}</b-button>
+      
     <!-- <v-touch:swipe.left="previousChapter(book.name, chapterNum)"  v-touch:swipe.right="nextChapter(book.name, chapterNum)"> 
     -->    
-    <p>{{n}}</p>
+    <p>{{verseText}}</p>
     
         
     
@@ -21,7 +21,7 @@ var bookname;
       return {
        
         props: {
-          books: Array
+verseText: String
         }
 
       }
