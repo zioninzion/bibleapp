@@ -3,7 +3,6 @@
       
     <!-- <v-touch:swipe.left="previousChapter(book.name, chapterNum)"  v-touch:swipe.right="nextChapter(book.name, chapterNum)"> 
     -->    
-    <p>{{verseText}}</p>
     
         
     

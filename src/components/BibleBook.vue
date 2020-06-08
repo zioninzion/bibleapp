@@ -26,11 +26,16 @@ import Chapter from "./Chapter";
 const axios = require("axios");
     
 var bookname;
-  export default {
+  //export default {
+  export const Mixin = {
     name: "BibleBook",
+    props: {
+
+        verseText:String,
+    },
     data() {
       return {
-       verseText: 'Hello',   
+       //verseText: 'Hello',   
        chapterNum: 0,  
        books: 
       [
