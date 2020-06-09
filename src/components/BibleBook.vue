@@ -1,6 +1,6 @@
 <template>
 <div role="tablist">
-<Chapter :verseText="verseText"/>
+<!--<Chapter :verseText="verseText"/>-->
       
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
     <b-card no-body class="mb-1" v-for="book in books" :bkey="book.name" v-bind:key="book.name" :chapters="book.chapters">
@@ -12,105 +12,55 @@
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
        <b-card v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number)">
          <b-card-text>{{number}}</b-card-text>
-         <b-card-text>{{verseText}}</b-card-text>
+         <b-card-text>{{}}</b-card-text>
         </b-card>
         </b-collapse>
     </b-card>
 
   </div>
 </template>
-
+  
 
 <script>
-import Chapter from "./Chapter";
-const axios = require("axios");
-    
-var bookname;
-  //export default {
-  export const Mixin = {
+
+//import Chapter from "./Chapter";
+//const axios = require("axios");
+import {mapState} from 'vuex'    
+
+  export default{
     name: "BibleBook",
-    props: {
 
-        verseText:String,
+ 
+
+mounted(){
+  console.log(this.$store.state.verseText);
+  console.log(this.$store.getters.verseText);
+  this.$store.state.bookname;
+  console.log(this.$store.state.chapterNum);
+},
+
+
+computed: mapState({
+        books: state=>state.books,
+    }),
+
+   verses() {
+      return this.$store.getters.verseText
     },
-    data() {
-      return {
-       //verseText: 'Hello',   
-       chapterNum: 0,  
-       books: 
-      [
-        {name: "Genesis", chapters: 50}, 
-        {name: "Exodus", chapters: 40}, 
-        {name: "Leviticus", chapters: 27}, 
-        {name: "Numbers", chapters: 36}, 
-        {name: "Deuteronomy", chapters: 34}, 
-       {name: "Joshua", chapters: 24}, 
-        {name: "Judges", chapters: 21}, 
-        {name: "Ruth", chapters: 4}, 
-        {name: "1 Samuel", chapters: 31}, 
-        {name: "2 Samuel", chapters: 24}, 
-        {name: "1 Kings", chapters: 22}, 
-        {name: "2 Kings", chapters: 25}, 
-        {name: "1 Chronicles", chapters: 29}, 
-        {name: "2 Chronicles", chapters: 36}, 
-        {name: "Ezra", chapters: 10}, 
-        {name: "Nehemiah", chapters: 13}, 
-        {name: "Esther", chapters: 10}, 
-        {name: "Job", chapters: 42}, 
-        {name: "Psalms", chapters: 150}, 
-        {name: "Proverbs", chapters: 31}, 
-        {name: "Ecclesiastes", chapters: 12}, 
-        {name: "Song of Solomon", chapters: 8}, 
-        {name: "Isaiah", chapters: 66}, 
-        {name: "Jeremiah", chapters: 52}, 
-        {name: "Lamentations", chapters: 5}, 
-        {name: "Ezekiel", chapters: 48}, 
-        {name: "Daniel", chapters: 12}, 
-        {name: "Hosea", chapters: 14}, 
-        {name: "Joel", chapters: 3}, 
-        {name: "Amos", chapters: 9}, 
-        {name: "Obadiah", chapters: 1}, 
-        {name: "Jonah", chapters: 4}, 
-        {name: "Micah", chapters: 7}, 
-        {name: "Nahum", chapters: 3}, 
-        {name: "Habakkuk", chapters: 3}, 
-        {name: "Zephaniah", chapters: 3}, 
-        {name: "Haggai", chapters: 2}, 
-        {name: "Zechariah", chapters: 14}, 
-        {name: "Malachi", chapters: 4}, 
-        {name: "Matthew", chapters: 28}, 
-        {name: "Mark", chapters: 16}, 
-        {name: "Luke", chapters: 24}, 
-        {name: "John", chapters: 21}, 
-        {name: "Acts", chapters: 28}, 
-        {name: "Romans", chapters: 16}, 
-        {name: "1 Corinthians", chapters: 16}, 
-        {name: "2 Corinthians", chapters: 13}, 
-        {name: "Galatians", chapters: 6}, 
-        {name: "Ephesians", chapters: 6}, 
-        {name: "Philippians", chapters: 4}, 
-        {name: "Colossians", chapters: 4}, 
-        {name: "1 Thessalonians", chapters: 5}, 
-        {name: "2 Thessalonians", chapters: 3}, 
-        {name: "1 Timothy", chapters: 6}, 
-        {name: "2 Timothy", chapters: 4}, 
-        {name: "Titus", chapters: 3}, 
-        {name: "Philemon", chapters: 1}, 
-        {name: "Hebrews", chapters: 13}, 
-        {name: "James", chapters: 5}, 
-        {name: "1 Peter", chapters: 5}, 
-        {name: "2 Peter", chapters: 3}, 
-        {name: "1 John", chapters: 5}, 
-        {name: "2 John", chapters: 1}, 
-        {name: "3 John", chapters: 1}, 
-        {name: "Jude", chapters: 1}, 
-        {name: "Revelation", chapters: 22} 
-       
-        ],
+
+methods:{
+  getBook(name){
+           this.$store.commit("getBook", name);
+       },
+      
+  getVerses(num){
+
+    this.$store.commit("getVerses", num);
+  }
+},
+/*
 
 
-      }
-      },
     
  components:{
         Chapter
@@ -139,16 +89,18 @@ var bookname;
      Text.verseText = response.data.verses[0].text       
      console.log(Text.verseText) 
             })
-/*axios.get('https://api.lsm.org/recver.php?String='+bookname+num+':31-60'+'&Out=json')
+axios.get('https://api.lsm.org/recver.php?String='+bookname+num+':31-60'+'&Out=json')
  .then(response=> (
          verseText = response.data.verses[0].ref  
        //console.log(response.data.verses[0].ref)
            
            ))
             console.log(verseText)
- */           
-  } 
-   /* 
+            
+  }
+
+   
+    
  var rcvverses=this.verse
     var rcvverses2=this.verse2
     
@@ -180,9 +132,9 @@ var bookname;
 
       
     }
-    */
+    
        }
-
+*/
     }
   
 
