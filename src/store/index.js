@@ -9,8 +9,9 @@ const axios = require("axios");
 
 export default new Vuex.Store({
   state: {
+    isVisible: true,
     bookname: "",
-    verseText: "Hello",
+    verseText: "",
     chapterNum: 0,
     books: [
       { name: "Genesis", chapters: 50 },
@@ -94,13 +95,14 @@ export default new Vuex.Store({
     },
 
     getVerses(state, num) {
+      state.isVisible = false;
       state.chapterNum = num;
 
       //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
       var Text = this;
 
       //this.verseText = "Changed"
-      console.log(state.chapterNum);
+      //console.log(state.chapterNum);
       axios
         .get(
           "https://api.lsm.org/recver.php?String=" +
@@ -112,10 +114,65 @@ export default new Vuex.Store({
         //
         .then(function(response) {
           Text.state.verseText = response.data.verses[0].text;
-          console.log(Text.state.verseText);
-          return Text.state.verseText;
+         // console.log(Text.state.verseText);
+          //console.log(verse)
+          console.log(Text.state.verseText)
         });
     },
-  },
+      previousChapter(state, num) {
+        state.chapterNum = num;
+
+        //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
+        var Text = this;
+
+        //this.verseText = "Changed"
+       //console.log(state.chapterNum);
+        axios
+          .get(
+            "https://api.lsm.org/recver.php?String=" +
+              state.bookname +
+              num +
+              "&Out=json"
+          )
+
+          //
+          .then(function(response) {
+            Text.state.verseText = response.data.verses[0].text;
+          // console.log(Text.state.verseText);
+           //console.log(verse)
+       //    console.log(Text.state.verseText)
+          });
+
+    },
+
+
+    nextChapter(state, num) {
+        state.chapterNum = num;
+
+        //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
+        var Text = this;
+
+        //this.verseText = "Changed"
+~       //console.log(state.chapterNum);
+        axios
+          .get(
+            "https://api.lsm.org/recver.php?String=" +
+              state.bookname +
+              num +
+              "&Out=json"
+          )
+
+          //
+          .then(function(response) {
+            Text.state.verseText = response.data.verses[0].text;
+          // console.log(Text.state.verseText);
+           //console.log(verse)
+         //  console.log(Text.state.verseText)
+          });
+
+
+    },
+},
   actions: {},
+
 });

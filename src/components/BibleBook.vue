@@ -1,6 +1,5 @@
 <template>
-<div role="tablist">
-<!--<Chapter :verseText="verseText"/>-->
+<div role="tablist" v-show="$store.state.isVisible">
       
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
     <b-card no-body class="mb-1" v-for="book in books" :bkey="book.name" v-bind:key="book.name" :chapters="book.chapters">
@@ -12,7 +11,7 @@
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
        <b-card v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number)">
          <b-card-text>{{number}}</b-card-text>
-         <b-card-text>{{}}</b-card-text>
+       <!--  <b-card-text>{{$store.state.verseText}}</b-card-text> -->
         </b-card>
         </b-collapse>
     </b-card>
@@ -23,20 +22,24 @@
 
 <script>
 
-//import Chapter from "./Chapter";
 //const axios = require("axios");
 import {mapState} from 'vuex'    
-
   export default{
     name: "BibleBook",
 
- 
 
+/*beforeCreated()
+{
+
+    //  this.verseText = this.$store.state.verseText
+},
+*/
 mounted(){
-  console.log(this.$store.state.verseText);
-  console.log(this.$store.getters.verseText);
-  this.$store.state.bookname;
-  console.log(this.$store.state.chapterNum);
+  //console.log(this.$store.state.verseText);
+  //console.log(this.verseText);
+ this.$store.state.isVisible;
+ this.$store.state.bookname;
+ this.$store.state.chapterNum;
 },
 
 
@@ -54,8 +57,11 @@ methods:{
        },
       
   getVerses(num){
-
-    this.$store.commit("getVerses", num);
+      
+           
+          this.$store.commit("getVerses", num);
+          //console.log(this.$store.state.verseText)
+          //console.log(this.verseText)
   }
 },
 /*

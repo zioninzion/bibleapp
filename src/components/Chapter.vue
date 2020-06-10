@@ -3,7 +3,7 @@
       
     <!-- <v-touch:swipe.left="previousChapter(book.name, chapterNum)"  v-touch:swipe.right="nextChapter(book.name, chapterNum)"> 
     -->    
-    
+    <p v-for="num in $store.state.verseText" :key=num> {{num + $store.state.verseText}}</p>
         
     
   </div>
@@ -11,43 +11,19 @@
 
 
 <script>
-const axios = require("axios");
-    var verseText;
-var bookname;
   export default {
     name:"Chapter",
-    data() {
-      return {
-       
-        props: {
-verseText: String
-        }
-
-      }
-      },
-    
-
-    
+         
  methods:{
   
 
-  previousChapter(name, num) { 
-    axios.get('https://api.lsm.org/recver.php?String='+bookname+num+'&Out=json')
-    .then(function(response){
-     verseText = response.data.verses[0].text       
-        console.log(verseText)                 
-            })
-            console.log(verseText)
+  previousChapter(num) { 
+      this.$store.commit("previousChapter", num);
   },
 
 
   nextChapter(name, num) { 
-    axios.get('https://api.lsm.org/recver.php?String='+bookname+num+'&Out=json')
-    .then(function(response){
-     verseText = response.data.verses[0].text       
-        console.log(verseText)                 
-            })
-            console.log(verseText)
+      this.$store.commit("nextChapter", num);
    /* 
  var rcvverses=this.verse
     var rcvverses2=this.verse2
@@ -81,7 +57,7 @@ verseText: String
       
     }
     */
-       }
+       },
 
     }
   } 
