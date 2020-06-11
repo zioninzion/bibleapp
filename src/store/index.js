@@ -185,6 +185,7 @@ export default new Vuex.Store({
               if (typeof set1.verses[i] == "undefined") {
                 axios.get(request1);
                 i = 0;
+                continue;
               }
 
               Text.state.verseText = set1.verses[i].text;
@@ -201,6 +202,7 @@ export default new Vuex.Store({
               if (typeof set2.verses[j] == "undefined") {
                 axios.get(request2);
                 j = 0;
+                continue;
               }
               Text.state.verseText = set2.verses[j].text;
               if (Text.state.verseText.startsWith("No such verse")) {
@@ -215,6 +217,7 @@ export default new Vuex.Store({
               if (typeof set3.verses[k] == "undefined") {
                 axios.get(request3);
                 k = 0;
+                continue;
               }
               Text.state.verseText = set3.verses[k].text;
               if (Text.state.verseText.startsWith("No such verse")) {
@@ -228,6 +231,7 @@ export default new Vuex.Store({
               if (typeof set4.verses[l] == "undefined") {
                 axios.get(request4);
                 l = 0;
+                continue;
               }
               Text.state.verseText = set4.verses[l].text;
               if (Text.state.verseText.startsWith("No such verse")) {
@@ -241,6 +245,7 @@ export default new Vuex.Store({
               if (typeof set5.verses[m] == "undefined") {
                 axios.get(request5);
                 m = 0;
+                continue;
               }
               Text.state.verseText = set5.verses[m].text;
               if (Text.state.verseText.startsWith("No such verse")) {
@@ -254,6 +259,7 @@ export default new Vuex.Store({
               if (typeof set6.verses[n] == "undefined") {
                 axios.get(request6);
                 n = 0;
+                continue;
               }
               Text.state.verseText = set6.verses[n].text;
               if (Text.state.verseText.startsWith("No such verse")) {
