@@ -14,7 +14,7 @@ export default new Vuex.Store({
     verseText: "",
     verseNum: "",
     chapterNum: 0,
-    verseArray: [],
+    verseArray: [""],
     books: [
       { name: "Genesis", chapters: 50 },
       { name: "Exodus", chapters: 40 },
@@ -100,55 +100,59 @@ export default new Vuex.Store({
       state.isVisible = false;
       state.chapterNum = num;
       state.verseNum = 0;
-      
+
       //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
       var Text = this;
       var request1 =
         "https://api.lsm.org/recver.php?String=" +
         state.bookname +
-        num + ":1-30"+
+        num +
+        ":1-30" +
         "&Out=json";
       var request2 =
         "https://api.lsm.org/recver.php?String=" +
         state.bookname +
         num +
-        ":31-60"+
-      "&Out=json";
+        ":31-60" +
+        "&Out=json";
       var request3 =
         "https://api.lsm.org/recver.php?String=" +
         state.bookname +
-        num + ":61-90"+
+        num +
+        ":61-90" +
         "&Out=json";
       var request4 =
         "https://api.lsm.org/recver.php?String=" +
         state.bookname +
-        num + ":91-120" +
+        num +
+        ":91-120" +
         "&Out=json";
       var request5 =
         "https://api.lsm.org/recver.php?String=" +
         state.bookname +
-        num + ":121-150" +
+        num +
+        ":121-150" +
         "&Out=json";
       var request6 =
         "https://api.lsm.org/recver.php?String=" +
         state.bookname +
-        num + ":151-180" +
+        num +
+        ":151-180" +
         "&Out=json";
-      
-      var set1
-      var set2
-      var set3
-      var set4
-      var set5
-      var set6
 
+      var set1;
+      var set2;
+      var set3;
+      var set4;
+      var set5;
+      var set6;
 
-      const verseRequest1= axios.get(request1);
-      const verseRequest2= axios.get(request2);
-      const verseRequest3= axios.get(request3);
-      const verseRequest4= axios.get(request4);
-      const verseRequest5= axios.get(request5);
-      const verseRequest6= axios.get(request6);
+      const verseRequest1 = axios.get(request1);
+      const verseRequest2 = axios.get(request2);
+      const verseRequest3 = axios.get(request3);
+      const verseRequest4 = axios.get(request4);
+      const verseRequest5 = axios.get(request5);
+      const verseRequest6 = axios.get(request6);
 
       axios
         .all([
@@ -161,75 +165,109 @@ export default new Vuex.Store({
         ])
 
         .then(
-          axios.spread(function(response, response2, response3, response4, response5, response6){
-           console.log(response.data.verses[3].text )
-            set1= response.data
-            set2= response2.data
-            set3= response3.data
-            set4= response4.data
-            set5= response5.data
-            set6= response6.data
+          axios.spread(function(
+            response,
+            response2,
+            response3,
+            response4,
+            response5,
+            response6
+          ) {
+            console.log(response.data.verses[3].text);
+            set1 = response.data;
+            set2 = response2.data;
+            set3 = response3.data;
+            set4 = response4.data;
+            set5 = response5.data;
+            set6 = response6.data;
 
             for (var i = 0; i < 30; i++) {
-              
+              if (typeof set1.verses[i] == "undefined") {
+                axios.get(request1);
+                i = 0;
+              }
+
               Text.state.verseText = set1.verses[i].text;
+
               if (Text.state.verseText.startsWith("No such verse")) {
                 return Text.state.verseText;
               }
               state.verseArray[state.verseNum] = Text.state.verseText;
               state.verseNum = +state.verseNum + 1;
-              console.log(state.verseArray[i])
+              console.log(state.verseArray[i]);
             }
 
             for (var j = 0; j < 30; j++) {
+              if (typeof set2.verses[j] == "undefined") {
+                axios.get(request2);
+                j = 0;
+              }
               Text.state.verseText = set2.verses[j].text;
               if (Text.state.verseText.startsWith("No such verse")) {
                 return Text.state.verseText;
               }
               state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText)
-              console.log(state.verseNum)
+              console.log(Text.state.verseText);
+              console.log(state.verseNum);
               state.verseNum = +state.verseNum + 1;
             }
             for (var k = 0; k < 30; k++) {
+              if (typeof set3.verses[k] == "undefined") {
+                axios.get(request3);
+                k = 0;
+              }
               Text.state.verseText = set3.verses[k].text;
               if (Text.state.verseText.startsWith("No such verse")) {
                 return Text.state.verseText;
               }
               state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText)
+              console.log(Text.state.verseText);
               state.verseNum = +state.verseNum + 1;
             }
             for (var l = 0; l < 30; l++) {
+              if (typeof set4.verses[l] == "undefined") {
+                axios.get(request4);
+                l = 0;
+              }
               Text.state.verseText = set4.verses[l].text;
               if (Text.state.verseText.startsWith("No such verse")) {
                 return Text.state.verseText;
               }
               state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText)
+              console.log(Text.state.verseText);
               state.verseNum = +state.verseNum + 1;
             }
             for (var m = 0; m < 30; m++) {
+              if (typeof set5.verses[m] == "undefined") {
+                axios.get(request5);
+                m = 0;
+              }
               Text.state.verseText = set5.verses[m].text;
               if (Text.state.verseText.startsWith("No such verse")) {
                 return Text.state.verseText;
               }
               state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText)
+              console.log(Text.state.verseText);
               state.verseNum = +state.verseNum + 1;
             }
             for (var n = 0; n < 30; n++) {
+              if (typeof set6.verses[n] == "undefined") {
+                axios.get(request6);
+                n = 0;
+              }
               Text.state.verseText = set6.verses[n].text;
               if (Text.state.verseText.startsWith("No such verse")) {
                 return Text.state.verseText;
               }
               state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText)
+              console.log(Text.state.verseText);
               state.verseNum = +state.verseNum + 1;
             }
-                     })).catch(function(errors){
-              console.log(errors)
           })
+        )
+        .catch(function(errors) {
+          console.log(errors);
+        });
       /*     console.log(state.verseNum);
           console.log(state.verseArray.length);
           if (state.verseNum >= 30) {
