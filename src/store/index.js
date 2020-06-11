@@ -12,7 +12,9 @@ export default new Vuex.Store({
     isVisible: true,
     bookname: "",
     verseText: "",
+    verseNum: "",
     chapterNum: 0,
+    verseArray: [],
     books: [
       { name: "Genesis", chapters: 50 },
       { name: "Exodus", chapters: 40 },
@@ -100,6 +102,232 @@ export default new Vuex.Store({
 
       //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
       var Text = this;
+      var verseRequest1 =
+        "https://api.lsm.org/recver.php?String=" +
+        state.bookname +
+        num +
+        "&Out=json";
+      var verseRequest2 =
+        "https://api.lsm.org/recver.php?String=" +
+        state.bookname +
+        num +
+        ":31-60";
+      ("&Out=json");
+      /*  var verseRequest3 =
+        "https://api.lsm.org/recver.php?String=" +
+        state.bookname +
+        num +
+        "&Out=json";
+      var verseRequest4 =
+        "https://api.lsm.org/recver.php?String=" +
+        state.bookname +
+        num +
+        "&Out=json";
+      var verseRequest5 =
+        "https://api.lsm.org/recver.php?String=" +
+        state.bookname +
+        num +
+        "&Out=json";
+      //this.verseText = "Changed"
+      //console.log(state.chapterNum);
+      */
+      axios
+        .all([
+          verseRequest1,
+          verseRequest2,
+          //verseRequest3,
+          //verseRequest4,
+          //verseRequest5,
+        ])
+
+        .then(
+          axios.spread((...responses) => {
+            const verseRequest1 = responses[0];
+            const verseRequest2 = responses[1];
+            //const verseRequest3 = responses[2];
+            //const verseRequest4 = responses[3];
+            //const verseRequest5 = responses[4];
+            for (var i = 0; i < 30; i++) {
+              Text.state.verseText = verseRequest1.data.verses[i].text;
+              if (Text.state.verse.startsWith("No such verse")) {
+                return Text.state.verseText;
+              }
+              state.verseArray[i] = Text.state.verseText;
+              state.verseNum = +state.verseNum + 1;
+              //console.log(state.verseNum);
+              //console.log(verse)
+              //console.log(Text.state.verseText);
+            }
+
+            for (var j = 0; j < 30; i++) {
+              var k = 30;
+              Text.state.verseText = verseRequest2.data.verses[j].text;
+              if (Text.state.verse.startsWith("No such verse")) {
+                return Text.state.verseText;
+              }
+
+              state.verseArray[k] = Text.state.verseText;
+              state.verseNum = +state.verseNum + 1;
+              k = k + 1;
+              //console.log(state.verseNum);
+              //console.log(verse)
+              //console.log(Text.state.verseText);
+            }
+          })
+        );
+      /*     console.log(state.verseNum);
+          console.log(state.verseArray.length);
+          if (state.verseNum >= 30) {
+            axios
+              .get(
+                "https://api.lsm.org/recver.php?String=" +
+                  state.bookname +
+                  num +
+                  ":31-60" +
+                  "&Out=json"
+              )
+              .then(function(response) {
+                for (var j = 0; j < 30; j++) {
+                  Text.state.verseText = response.data.verses[j].text;
+                  state.verseArray[state.verseNum] = Text.state.verseText;
+
+                  if (Text.state.verseText.startsWith("No such verse")) {
+                    return Text.state.verseText;
+                  }
+
+                  console.log(state.verseArray[state.verseNum]);
+                  state.verseNum = +state.verseNum + 1;
+                  console.log(state.verseNum);
+                }
+
+                if (state.verseNum >= 60) {
+                  axios
+                    .get(
+                      "https://api.lsm.org/recver.php?String=" +
+                        state.bookname +
+                        num +
+                        ":61-90" +
+                        "&Out=json"
+                    )
+                    .then(function(response) {
+                      for (var k = 0; k < 30; k++) {
+                        Text.state.verseText = response.data.verses[k].text;
+                        state.verseArray[state.verseNum] = Text.state.verseText;
+
+                        if (Text.state.verseText.startsWith("No such verse")) {
+                          return Text.state.verseText;
+                        }
+
+                        console.log(state.verseArray[state.verseNum]);
+                        state.verseNum = +state.verseNum + 1;
+                        console.log(state.verseNum);
+                      }
+
+                      if (state.verseNum >= 90) {
+                        axios
+                          .get(
+                            "https://api.lsm.org/recver.php?String=" +
+                              state.bookname +
+                              num +
+                              ":91-120" +
+                              "&Out=json"
+                          )
+                          .then(function(response) {
+                            for (var l = 0; l < 30; l++) {
+                              Text.state.verseText =
+                                response.data.verses[l].text;
+                              state.verseArray[state.verseNum] =
+                                Text.state.verseText;
+
+                              if (
+                                Text.state.verseText.startsWith("No such verse")
+                              ) {
+                                return Text.state.verseText;
+                              }
+
+                              console.log(state.verseArray[state.verseNum]);
+                              state.verseNum = +state.verseNum + 1;
+                              console.log(state.verseNum);
+                            }
+
+                            if (state.verseNum >= 120) {
+                              axios
+                                .get(
+                                  "https://api.lsm.org/recver.php?String=" +
+                                    state.bookname +
+                                    num +
+                                    ":121-150" +
+                                    "&Out=json"
+                                )
+                                .then(function(response) {
+                                  for (var m = 0; m < 30; j++) {
+                                    Text.state.verseText =
+                                      response.data.verses[m].text;
+                                    state.verseArray[state.verseNum] =
+                                      Text.state.verseText;
+
+                                    if (
+                                      Text.state.verseText.startsWith(
+                                        "No such verse"
+                                      )
+                                    ) {
+                                      return Text.state.verseText;
+                                    }
+
+                                    console.log(
+                                      state.verseArray[state.verseNum]
+                                    );
+                                    state.verseNum = +state.verseNum + 1;
+                                    console.log(state.verseNum);
+                                  }
+                                  if (state.verseNum >= 150) {
+                                    axios
+                                      .get(
+                                        "https://api.lsm.org/recver.php?String=" +
+                                          state.bookname +
+                                          num +
+                                          ":151-180" +
+                                          "&Out=json"
+                                      )
+                                      .then(function(response) {
+                                        for (var n = 0; n < 30; n++) {
+                                          Text.state.verseText =
+                                            response.data.verses[n].text;
+                                          state.verseArray[state.verseNum] =
+                                            Text.state.verseText;
+
+                                          if (
+                                            Text.state.verseText.startsWith(
+                                              "No such verse"
+                                            )
+                                          ) {
+                                            return Text.state.verseText;
+                                          }
+
+                                          console.log(
+                                            state.verseArray[state.verseNum]
+                                          );
+                                          state.verseNum = +state.verseNum + 1;
+                                          console.log(state.verseNum);
+                                        }
+                                      }); // console.log(Text.state.verseText);
+                                  }
+                                }); // console.log(Text.state.verseText);
+                            }
+                          }); // console.log(Text.state.verseText);
+                      }
+                    }); // console.log(Text.state.verseText);
+                }
+              }); // console.log(Text.state.verseText);
+          }
+        });
+      // return state.verseNum;
+    },
+    previousChapter(state, num) {
+      state.chapterNum = num;
+
+      //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
+      var Text = this;
 
       //this.verseText = "Changed"
       //console.log(state.chapterNum);
@@ -114,46 +342,22 @@ export default new Vuex.Store({
         //
         .then(function(response) {
           Text.state.verseText = response.data.verses[0].text;
-         // console.log(Text.state.verseText);
-          //console.log(verse)
-          console.log(Text.state.verseText)
-        });
-    },
-      previousChapter(state, num) {
-        state.chapterNum = num;
-
-        //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
-        var Text = this;
-
-        //this.verseText = "Changed"
-       //console.log(state.chapterNum);
-        axios
-          .get(
-            "https://api.lsm.org/recver.php?String=" +
-              state.bookname +
-              num +
-              "&Out=json"
-          )
-
-          //
-          .then(function(response) {
-            Text.state.verseText = response.data.verses[0].text;
           // console.log(Text.state.verseText);
-           //console.log(verse)
-       //    console.log(Text.state.verseText)
-          });
-
+          //console.log(verse)
+          //    console.log(Text.state.verseText)
+        });
+        */
     },
-
 
     nextChapter(state, num) {
-        state.chapterNum = num;
+      state.chapterNum = num;
 
-        //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
-        var Text = this;
+      //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
+      var Text = this;
 
-        //this.verseText = "Changed"
-~       //console.log(state.chapterNum);
+      //this.verseText = "Changed"
+      ~(
+        //console.log(state.chapterNum);
         axios
           .get(
             "https://api.lsm.org/recver.php?String=" +
@@ -165,14 +369,12 @@ export default new Vuex.Store({
           //
           .then(function(response) {
             Text.state.verseText = response.data.verses[0].text;
-          // console.log(Text.state.verseText);
-           //console.log(verse)
-         //  console.log(Text.state.verseText)
-          });
-
-
+            // console.log(Text.state.verseText);
+            //console.log(verse)
+            //  console.log(Text.state.verseText)
+          })
+      );
     },
-},
+  },
   actions: {},
-
 });

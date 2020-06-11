@@ -3,7 +3,7 @@
       
     <!-- <v-touch:swipe.left="previousChapter(book.name, chapterNum)"  v-touch:swipe.right="nextChapter(book.name, chapterNum)"> 
     -->    
-    <p v-for="num in $store.state.verseText" :key=num> {{num + $store.state.verseText}}</p>
+    <p v-for="num in $store.state.verseNum" :key="num">{{num +" "+ $store.state.verseArray[num-1]}}</p>
         
     
   </div>
