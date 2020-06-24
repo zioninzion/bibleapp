@@ -22,7 +22,7 @@
   },
 
 
-  nextChapter(name, num) { 
+  nextChapter(num) { 
       this.$store.commit("nextChapter", num);
    /* 
  var rcvverses=this.verse

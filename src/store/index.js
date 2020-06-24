@@ -183,7 +183,7 @@ export default new Vuex.Store({
       }
       // Promise.all takes the requests we just made and executes them in a certain order with the
       // .then function method. The responses variable is an array that holds the data
-      Promise.all([
+      await Promise.all([
         state.asyncRequests[0],
         state.asyncRequests[1],
         state.asyncRequests[2],
