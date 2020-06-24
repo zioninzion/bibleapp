@@ -15,6 +15,7 @@ export default new Vuex.Store({
     verseNum: "",
     chapterNum: 0,
     verseArray: [],
+    asyncRequests: [],
     books: [
       { name: "Genesis", chapters: 50 },
       { name: "Exodus", chapters: 40 },
@@ -34,7 +35,7 @@ export default new Vuex.Store({
       { name: "Nehemiah", chapters: 13 },
       { name: "Esther", chapters: 10 },
       { name: "Job", chapters: 42 },
-      { name: "Psalm", chapters: 150 },
+      { name: "Psalms", chapters: 150 },
       { name: "Proverbs", chapters: 31 },
       { name: "Ecclesiastes", chapters: 12 },
       { name: "Song of Solomon", chapters: 8 },
@@ -85,734 +86,151 @@ export default new Vuex.Store({
     ],
   },
 
+  //Stores the verse requested from the Api into the verseText variable
   getters: {
     verseText: (state) => {
       return state.verseText;
     },
   },
 
+  //Grab book name after user clicks the Bible book button
   mutations: {
     getBook(state, name) {
       state.bookname = name;
     },
 
-    getVerses(state, num) {
+    // async function to fetch the verses from an api url
+
+    async getVerses(state, num) {
+      // When a user presses the button of a chapter number this variable sets to false and hides
+      // the Bible book component
       state.isVisible = false;
+
+      //This variable saves the chapter number that the user requested
       state.chapterNum = num;
+
+      //This variable updates inside an array and contains each requested verse
       state.verseNum = 0;
 
-      //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
+      //The "this" keyword is not bound inside axios.then(function). Assigning this to a variable allows
+      //us to refer to the "data" property
       var Text = this;
-      var request1 =
-        "https://api.lsm.org/recver.php?String=" +
-        state.bookname +
-        num +
-        ":1-30" +
-        "&Out=json";
-      var request2 =
-        "https://api.lsm.org/recver.php?String=" +
-        state.bookname +
-        num +
-        ":31-60" +
-        "&Out=json";
-      var request3 =
-        "https://api.lsm.org/recver.php?String=" +
-        state.bookname +
-        num +
-        ":61-90" +
-        "&Out=json";
-      var request4 =
-        "https://api.lsm.org/recver.php?String=" +
-        state.bookname +
-        num +
-        ":91-120" +
-        "&Out=json";
-      var request5 =
-        "https://api.lsm.org/recver.php?String=" +
-        state.bookname +
-        num +
-        ":121-150" +
-        "&Out=json";
-      var request6 =
-        "https://api.lsm.org/recver.php?String=" +
-        state.bookname +
-        num +
-        ":151-180" +
-        "&Out=json";
-
-      var set1;
-      var set2;
-      var set3;
-      var set4;
-      var set5;
-      var set6;
-
-      const verseRequest1 = axios.get(request1);
-      const verseRequest2 = axios.get(request2);
-      const verseRequest3 = axios.get(request3);
-      const verseRequest4 = axios.get(request4);
-      const verseRequest5 = axios.get(request5);
-      const verseRequest6 = axios.get(request6);
-
-      axios
-        .all([
-          verseRequest1,
-          verseRequest2,
-          verseRequest3,
-          verseRequest4,
-          verseRequest5,
-          verseRequest6,
-        ])
-
-        .then(
-          axios.spread(function(
-            response,
-            response2,
-            response3,
-            response4,
-            response5,
-            response6
-          ) {
-            console.log(response.data.verses[3].text);
-            set1 = response.data;
-            set2 = response2.data;
-            set3 = response3.data;
-            set4 = response4.data;
-            set5 = response5.data;
-            set6 = response6.data;
-
-            for (var i = 0; i < 30; i++) {
-              if (typeof set1.verses[i] == undefined) {
-                axios.get(request1);
-                i = 0;
-                continue;
-              }
-
-              Text.state.verseText = set1.verses[i].text;
-
-              if (Text.state.verseText.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-              state.verseArray[state.verseNum] = Text.state.verseText;
-              state.verseNum = +state.verseNum + 1;
-              console.log(state.verseArray[i]);
-            }
-
-            for (var j = 0; j < 30; j++) {
-              if (typeof set2.verses[j] == undefined) {
-                axios.get(request2);
-                j = 0;
-                continue;
-              }
-              Text.state.verseText = set2.verses[j].text;
-              if (Text.state.verseText.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-              state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText);
-              console.log(state.verseNum);
-              state.verseNum = +state.verseNum + 1;
-            }
-            for (var k = 0; k < 30; k++) {
-              if (typeof set3.verses[k] == undefined) {
-                axios.get(request3);
-                k = 0;
-                continue;
-              }
-              Text.state.verseText = set3.verses[k].text;
-              if (Text.state.verseText.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-              state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText);
-              state.verseNum = +state.verseNum + 1;
-            }
-            for (var l = 0; l < 30; l++) {
-              if (typeof set4.verses[l] == undefined) {
-                axios.get(request4);
-                l = 0;
-                continue;
-              }
-              Text.state.verseText = set4.verses[l].text;
-              if (Text.state.verseText.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-              state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText);
-              state.verseNum = +state.verseNum + 1;
-            }
-            for (var m = 0; m < 30; m++) {
-              if (typeof set5.verses[m] == undefined) {
-                axios.get(request5);
-                m = 0;
-                continue;
-              }
-              Text.state.verseText = set5.verses[m].text;
-              if (Text.state.verseText.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-              state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText);
-              state.verseNum = +state.verseNum + 1;
-            }
-            for (var n = 0; n < 30; n++) {
-              if (typeof set6.verses[n] == undefined) {
-                axios.get(request6);
-                n = 0;
-                continue;
-              }
-              Text.state.verseText = set6.verses[n].text;
-              if (Text.state.verseText.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-              state.verseArray[state.verseNum] = Text.state.verseText;
-              console.log(Text.state.verseText);
-              state.verseNum = +state.verseNum + 1;
-            }
-          })
-        )
-        .catch(function(errors) {
-          console.log(errors);
-        });
-      /*     console.log(state.verseNum);
-          console.log(state.verseArray.length);
-          if (state.verseNum >= 30) {
-            axios
-              .get(
-                "https://api.lsm.org/recver.php?String=" +
-                  state.bookname +
-                  num +
-                  ":31-60" +
-                  "&Out=json"
-              )
-              .then(function(response) {
-                for (var j = 0; j < 30; j++) {
-                  Text.state.verseText = response.data.verses[j].text;
-                  state.verseArray[state.verseNum] = Text.state.verseText;
-
-                  if (Text.state.verseText.startsWith("No such verse")) {
-                    return Text.state.verseText;
-                  }
-
-                  console.log(state.verseArray[state.verseNum]);
-                  state.verseNum = +state.verseNum + 1;
-                  console.log(state.verseNum);
-                }
-
-                if (state.verseNum >= 60) {
-                  axios
-                    .get(
-                      "https://api.lsm.org/recver.php?String=" +
-                        state.bookname +
-                        num +
-                        ":61-90" +
-
-            for (var j = 0; j < 30; i++) {
-              var k = 30;
-              Text.state.verseText = verseRequest2.data.verses[j].text;
-              if (Text.state.verse.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-
-              state.verseArray[k] = Text.state.verseText;
-              state.verseNum = +state.verseNum + 1;
-              k = k + 1;
-              //console.log(state.verseNum);
-              //console.log(verse)
-              //console.log(Text.state.verseText);
-            }
-          }));
-      /*     console.log(state.verseNum);
-          console.log(state.verseArray.length);
-          if (state.verseNum >= 30) {
-            axios
-              .get(
-                "https://api.lsm.org/recver.php?String=" +
-                  state.bookname +
-                  num +
-                  ":31-60" +
-                  "&Out=json"
-              )
-              .then(function(response) {
-                for (var j = 0; j < 30; j++) {
-                  Text.state.verseText = response.data.verses[j].text;
-                  state.verseArray[state.verseNum] = Text.state.verseText;
-
-                  if (Text.state.verseText.startsWith("No such verse")) {
-                    return Text.state.verseText;
-                  }
-
-                  console.log(state.verseArray[state.verseNum]);
-                  state.verseNum = +state.verseNum + 1;
-                  console.log(state.verseNum);
-                }
-
-                if (state.verseNum >= 60) {
-                  axios
-                    .get(
-                      "https://api.lsm.org/recver.php?String=" +
-                        state.bookname +
-                        num +
-                        ":61-90" +
-
-            for (var j = 0; j < 30; i++) {
-              var k = 30;
-              Text.state.verseText = verseRequest2.data.verses[j].text;
-              if (Text.state.verse.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-
-              state.verseArray[k] = Text.state.verseText;
-              state.verseNum = +state.verseNum + 1;
-              k = k + 1;
-              //console.log(state.verseNum);
-              //console.log(verse)
-              //console.log(Text.state.verseText);
-            }
-          }));
-      /*     console.log(state.verseNum);
-          console.log(state.verseArray.length);
-          if (state.verseNum >= 30) {
-            axios
-              .get(
-                "https://api.lsm.org/recver.php?String=" +
-                  state.bookname +
-                  num +
-                  ":31-60" +
-                  "&Out=json"
-              )
-              .then(function(response) {
-                for (var j = 0; j < 30; j++) {
-                  Text.state.verseText = response.data.verses[j].text;
-                  state.verseArray[state.verseNum] = Text.state.verseText;
-
-                  if (Text.state.verseText.startsWith("No such verse")) {
-                    return Text.state.verseText;
-                  }
-
-                  console.log(state.verseArray[state.verseNum]);
-                  state.verseNum = +state.verseNum + 1;
-                  console.log(state.verseNum);
-                }
-
-                if (state.verseNum >= 60) {
-                  axios
-                    .get(
-                      "https://api.lsm.org/recver.php?String=" +
-                        state.bookname +
-                        num +
-                        ":61-90" +
-
-            for (var j = 0; j < 30; i++) {
-              var k = 30;
-              Text.state.verseText = verseRequest2.data.verses[j].text;
-              if (Text.state.verse.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-
-              state.verseArray[k] = Text.state.verseText;
-              state.verseNum = +state.verseNum + 1;
-              k = k + 1;
-              //console.log(state.verseNum);
-              //console.log(verse)
-              //console.log(Text.state.verseText);
-            }
-          }));
-      /*     console.log(state.verseNum);
-          console.log(state.verseArray.length);
-          if (state.verseNum >= 30) {
-            axios
-              .get(
-                "https://api.lsm.org/recver.php?String=" +
-                  state.bookname +
-                  num +
-                  ":31-60" +
-                  "&Out=json"
-              )
-              .then(function(response) {
-                for (var j = 0; j < 30; j++) {
-                  Text.state.verseText = response.data.verses[j].text;
-                  state.verseArray[state.verseNum] = Text.state.verseText;
-
-                  if (Text.state.verseText.startsWith("No such verse")) {
-                    return Text.state.verseText;
-                  }
-
-                  console.log(state.verseArray[state.verseNum]);
-                  state.verseNum = +state.verseNum + 1;
-                  console.log(state.verseNum);
-                }
-
-                if (state.verseNum >= 60) {
-                  axios
-                    .get(
-                      "https://api.lsm.org/recver.php?String=" +
-                        state.bookname +
-                        num +
-                        ":61-90" +
-console.log(response2)
-
-            for (var j = 0; j < 30; i++) {
-              var k = 30;
-              Text.state.verseText = verseRequest2.data.verses[j].text;
-              if (Text.state.verse.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-
-              state.verseArray[k] = Text.state.verseText;
-              state.verseNum = +state.verseNum + 1;
-              k = k + 1;
-              //console.log(state.verseNum);
-              //console.log(verse)
-              //console.log(Text.state.verseText);
-            }
-          }));
-      /*     console.log(state.verseNum);
-          console.log(state.verseArray.length);
-          if (state.verseNum >= 30) {
-            axios
-              .get(
-                "https://api.lsm.org/recver.php?String=" +
-                  state.bookname +
-                  num +
-                  ":31-60" +
-                  "&Out=json"
-              )
-              .then(function(response) {
-                for (var j = 0; j < 30; j++) {
-                  Text.state.verseText = response.data.verses[j].text;
-                  state.verseArray[state.verseNum] = Text.state.verseText;
-
-                  if (Text.state.verseText.startsWith("No such verse")) {
-                    return Text.state.verseText;
-                  }
-
-                  console.log(state.verseArray[state.verseNum]);
-                  state.verseNum = +state.verseNum + 1;
-                  console.log(state.verseNum);
-                }
-
-                if (state.verseNum >= 60) {
-                  axios
-                    .get(
-                      "https://api.lsm.org/recver.php?String=" +
-                        state.bookname +
-                        num +
-                        ":61-90" +
-console.log(response2)
-
-            for (var j = 0; j < 30; i++) {
-              var k = 30;
-              Text.state.verseText = verseRequest2.data.verses[j].text;
-              if (Text.state.verse.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-
-              state.verseArray[k] = Text.state.verseText;
-              state.verseNum = +state.verseNum + 1;
-              k = k + 1;
-              //console.log(state.verseNum);
-              //console.log(verse)
-              //console.log(Text.state.verseText);
-            }
-          }));
-      /*     console.log(state.verseNum);
-          console.log(state.verseArray.length);
-          if (state.verseNum >= 30) {
-            axios
-              .get(
-                "https://api.lsm.org/recver.php?String=" +
-                  state.bookname +
-                  num +
-                  ":31-60" +
-                  "&Out=json"
-              )
-              .then(function(response) {
-                for (var j = 0; j < 30; j++) {
-                  Text.state.verseText = response.data.verses[j].text;
-                  state.verseArray[state.verseNum] = Text.state.verseText;
-
-                  if (Text.state.verseText.startsWith("No such verse")) {
-                    return Text.state.verseText;
-                  }
-
-                  console.log(state.verseArray[state.verseNum]);
-                  state.verseNum = +state.verseNum + 1;
-                  console.log(state.verseNum);
-                }
-
-                if (state.verseNum >= 60) {
-                  axios
-                    .get(
-                      "https://api.lsm.org/recver.php?String=" +
-                        state.bookname +
-                        num +
-                        ":61-90" +
-console.log(response2)
-
-            for (var j = 0; j < 30; i++) {
-              var k = 30;
-              Text.state.verseText = verseRequest2.data.verses[j].text;
-              if (Text.state.verse.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-
-              state.verseArray[k] = Text.state.verseText;
-              state.verseNum = +state.verseNum + 1;
-              k = k + 1;
-              //console.log(state.verseNum);
-              //console.log(verse)
-              //console.log(Text.state.verseText);
-            }
-          }));
-      /*     console.log(state.verseNum);
-          console.log(state.verseArray.length);
-          if (state.verseNum >= 30) {
-            axios
-              .get(
-                "https://api.lsm.org/recver.php?String=" +
-                  state.bookname +
-                  num +
-                  ":31-60" +
-                  "&Out=json"
-              )
-              .then(function(response) {
-                for (var j = 0; j < 30; j++) {
-                  Text.state.verseText = response.data.verses[j].text;
-                  state.verseArray[state.verseNum] = Text.state.verseText;
-
-                  if (Text.state.verseText.startsWith("No such verse")) {
-                    return Text.state.verseText;
-                  }
-
-                  console.log(state.verseArray[state.verseNum]);
-                  state.verseNum = +state.verseNum + 1;
-                  console.log(state.verseNum);
-                }
-
-                if (state.verseNum >= 60) {
-                  axios
-                    .get(
-                      "https://api.lsm.org/recver.php?String=" +
-                        state.bookname +
-                        num +
-                        ":61-90" +
-
-            for (var j = 0; j < 30; i++) {
-              var k = 30;
-              Text.state.verseText = verseRequest2.data.verses[j].text;
-              if (Text.state.verse.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
-
-              state.verseArray[k] = Text.state.verseText;
-              state.verseNum = +state.verseNum + 1;
-              k = k + 1;
-              //console.log(state.verseNum);
-              //console.log(verse)
-              //console.log(Text.state.verseText);
-            }
-          }));
-      /*     console.log(state.verseNum);
-          console.log(state.verseArray.length);
-          if (state.verseNum >= 30) {
-            axios
-              .get(
-                "https://api.lsm.org/recver.php?String=" +
-                  state.bookname +
-                  num +
-                  ":31-60" +
-                  "&Out=json"
-              )
-              .then(function(response) {
-                for (var j = 0; j < 30; j++) {
-                  Text.state.verseText = response.data.verses[j].text;
-                  state.verseArray[state.verseNum] = Text.state.verseText;
-
-                  if (Text.state.verseText.startsWith("No such verse")) {
-                    return Text.state.verseText;
-                  }
-
-                  console.log(state.verseArray[state.verseNum]);
-                  state.verseNum = +state.verseNum + 1;
-                  console.log(state.verseNum);
-                }
-
-                if (state.verseNum >= 60) {
-                  axios
-                    .get(
-                      "https://api.lsm.org/recver.php?String=" +
-                        state.bookname +
-                        num +
-                        ":61-90" +
-                        "&Out=json"
-                    )
-                    .then(function(response) {
-                      for (var k = 0; k < 30; k++) {
-                        Text.state.verseText = response.data.verses[k].text;
-                        state.verseArray[state.verseNum] = Text.state.verseText;
-
-                        if (Text.state.verseText.startsWith("No such verse")) {
-                          return Text.state.verseText;
-                        }
-
-                        console.log(state.verseArray[state.verseNum]);
-                        state.verseNum = +state.verseNum + 1;
-                        console.log(state.verseNum);
-                      }
-
-                      if (state.verseNum >= 90) {
-                        axios
-                          .get(
-                            "https://api.lsm.org/recver.php?String=" +
-                              state.bookname +
-                              num +
-                              ":91-120" +
-                              "&Out=json"
-                          )
-                          .then(function(response) {
-                            for (var l = 0; l < 30; l++) {
-                              Text.state.verseText =
-                                response.data.verses[l].text;
-                              state.verseArray[state.verseNum] =
-                                Text.state.verseText;
-
-                              if (
-                                Text.state.verseText.startsWith("No such verse")
-                              ) {
-                                return Text.state.verseText;
-                              }
-
-                              console.log(state.verseArray[state.verseNum]);
-                              state.verseNum = +state.verseNum + 1;
-                              console.log(state.verseNum);
-                            }
-
-                            if (state.verseNum >= 120) {
-                              axios
-                                .get(
-                                  "https://api.lsm.org/recver.php?String=" +
-                                    state.bookname +
-                                    num +
-                                    ":121-150" +
-                                    "&Out=json"
-                                )
-                                .then(function(response) {
-                                  for (var m = 0; m < 30; j++) {
-                                    Text.state.verseText =
-                                      response.data.verses[m].text;
-                                    state.verseArray[state.verseNum] =
-                                      Text.state.verseText;
-
-                                    if (
-                                      Text.state.verseText.startsWith(
-                                        "No such verse"
-                                      )
-                                    ) {
-                                      return Text.state.verseText;
-                                    }
-
-                                    console.log(
-                                      state.verseArray[state.verseNum]
-                                    );
-                                    state.verseNum = +state.verseNum + 1;
-                                    console.log(state.verseNum);
-                                  }
-                                  if (state.verseNum >= 150) {
-                                    axios
-                                      .get(
-                                        "https://api.lsm.org/recver.php?String=" +
-                                          state.bookname +
-                                          num +
-                                          ":151-180" +
-                                          "&Out=json"
-                                      )
-                                      .then(function(response) {
-                                        for (var n = 0; n < 30; n++) {
-                                          Text.state.verseText =
-                                            response.data.verses[n].text;
-                                          state.verseArray[state.verseNum] =
-                                            Text.state.verseText;
-
-                                          if (
-                                            Text.state.verseText.startsWith(
-                                              "No such verse"
-                                            )
-                                          ) {
-                                            return Text.state.verseText;
-                                          }
-
-                                          console.log(
-                                            state.verseArray[state.verseNum]
-                                          );
-                                          state.verseNum = +state.verseNum + 1;
-                                          console.log(state.verseNum);
-                                        }
-                                      }); // console.log(Text.state.verseText);
-                                  }
-                                }); // console.log(Text.state.verseText);
-                            }
-                          }); // console.log(Text.state.verseText);
-                      }
-                    }); // console.log(Text.state.verseText);
-                }
-              }); // console.log(Text.state.verseText);
-          }
-        });
-      // return state.verseNum;
-    },
-    previousChapter(state, num) {
-      state.chapterNum = num;
-
-      //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
-      var Text = this;
-
-      //this.verseText = "Changed"
-      //console.log(state.chapterNum);
-      axios
-        .get(
+      //Try catch block to log and capture errors
+      try {
+        /*
+         * Takes a specific api request to get a certain range of verses. Only 30 verses can be fetched
+         * at a time. The await keyword is crucial as it allows each axios request to complete before
+         * oing to the next one. Storing the requests inside an array assures the verses are printed in
+         * the proper order
+         */
+        state.asyncRequests[0] = await axios.get(
           "https://api.lsm.org/recver.php?String=" +
             state.bookname +
+            " " +
             num +
+            ":1-30" +
             "&Out=json"
-        )
+        );
+        state.asyncRequests[1] = await axios.get(
+          "https://api.lsm.org/recver.php?String=" +
+            state.bookname +
+            " " +
+            num +
+            ":31-60" +
+            "&Out=json"
+        );
 
-        //
+        state.asyncRequests[2] = await axios.get(
+          "https://api.lsm.org/recver.php?String=" +
+            state.bookname +
+            " " +
+            num +
+            ":61-90" +
+            "&Out=json"
+        );
+
+        state.asyncRequests[3] = await axios.get(
+          "https://api.lsm.org/recver.php?String=" +
+            state.bookname +
+            " " +
+            num +
+            ":91-120" +
+            "&Out=json"
+        );
+
+        state.asyncRequests[4] = await axios.get(
+          "https://api.lsm.org/recver.php?String=" +
+            state.bookname +
+            " " +
+            num +
+            ":121-150" +
+            "&Out=json"
+        );
+
+        state.asyncRequests[5] = await axios.get(
+          "https://api.lsm.org/recver.php?String=" +
+            state.bookname +
+            " " +
+            num +
+            ":151-180" +
+            "&Out=json"
+        );
+      } catch (err) {
+        console.log(err);
+      }
+      for (var i = 0; i < state.asyncRequests.length; i++) {
+        console.log(state.asyncRequests[i]);
+      }
+      // Promise.all takes the requests we just made and executes them in a certain order with the
+      // .then function method. The responses variable is an array that holds the data
+      Promise.all([
+        state.asyncRequests[0],
+        state.asyncRequests[1],
+        state.asyncRequests[2],
+        state.asyncRequests[3],
+        state.asyncRequests[4],
+        state.asyncRequests[5],
+      ])
+
         .then(function(response) {
-          Text.state.verseText = response.data.verses[0].text;
-          // console.log(Text.state.verseText);
-          //console.log(verse)
-          //    console.log(Text.state.verseText)
+          for (var i = 0; i < response.length; i++) {
+            for (var j = 0; j < 30; j++) {
+              // Take the data in the response array and store it inside the verseText variable.
+              // This helps us to cycle through each verse individually which are held in a json array.
+              Text.state.verseText = response[i].data.verses[j].text;
+
+              //The verse strings are stored in an array
+              state.verseArray[state.verseNum] = Text.state.verseText;
+
+              //Skips nonexistent verses
+              if (Text.state.verseText.startsWith("No such verse")) {
+                return Text.state.verseText;
+              }
+
+              state.verseNum = +state.verseNum + 1;
+            }
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
         });
-        */
-    },
-
-    nextChapter(state, num) {
-      state.chapterNum = num;
-
-      //this is not bound inside axios.then(function). Assigning this to   a variable allows us to refer to data property
-      var Text = this;
-
-      //this.verseText = "Changed"
-      ~(
-        //console.log(state.chapterNum);
-        axios
-          .get(
-            "https://api.lsm.org/recver.php?String=" +
-              state.bookname +
-              num +
-              "&Out=json"
-          )
-
-          //
-          .then(function(response) {
-            Text.state.verseText = response.data.verses[0].text;
-            // console.log(Text.state.verseText);
-            //console.log(verse)
-            //  console.log(Text.state.verseText)
-          })
-      );
     },
   },
+  async previousChapter(num) {
+    if (num >= 1) {
+      this.getVerses(num - 1);
+    } else {
+      this.getVerses(num);
+    }
+  },
+
+  async nextChapter(state, num) {
+    if (num <= state.books.chapters) {
+      this.getVerses(num + 1);
+    } else {
+      this.getVerses(num);
+    }
+  },
+
   actions: {},
 });
