@@ -1,8 +1,12 @@
 <template>
-  <div>
-      
-    <!-- <v-touch:swipe.left="previousChapter(book.name, chapterNum)"  v-touch:swipe.right="nextChapter(book.name, chapterNum)"> 
-    -->    
+  <div v-show="$store.state.isChapter">
+    <b-button block variant="primary" v-on:click="reloadPage()">
+{{$store.state.bookname}}
+    </b-button>
+    <br>
+    <br>
+    <h3 align="left">{{$store.state.bookname +" "+$store.state.chapterNum}}</h3>
+    <br>
     <p v-for="num in $store.state.verseNum" :key="num">{{num +" "+ $store.state.verseArray[num-1]}}</p>
         
     
@@ -14,6 +18,11 @@
   export default {
     name:"Chapter",
          
+mounted(){
+this.$store.state.isChapter;
+//this.$store.state.bookname;
+},
+
  methods:{
   
 
@@ -24,41 +33,15 @@
 
   nextChapter(num) { 
       this.$store.commit("nextChapter", num);
-   /* 
- var rcvverses=this.verse
-    var rcvverses2=this.verse2
-    
-    var verseRef
-    var verseText
-    
-    var i
-    var j
-    
-    for (i=0; i<30; i++)
-    {
-    
-    verseRef = rcvverses.data.verses[i].ref
-    verseText = rcvverses.data.verses[i].text
-     
-    console.log (verseRef+" "+verseText)
-    }
+  
 
-    for(j=0; j<30; j++){
               
-    verseRef = rcvverses2.data.verses[j].ref
-    verseText = rcvverses2.data.verses[j].text
-     
-    console.log (verseRef+" "+verseText)
-    if (verseText.startsWtih("No such verse"))
-    {
-      return
-    }
 
       
-    }
-    */
        },
-
+ reloadPage(){
+    window.location.reload()
+  }
     }
   } 
 

@@ -9,7 +9,7 @@
       <b-button block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name)" variant="info">{{book.name}}</b-button>
       </b-card-header>
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
-       <b-card v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number)">
+       <b-card v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number);">
          <b-card-text>{{number}}</b-card-text>
        <!--  <b-card-text>{{$store.state.verseText}}</b-card-text> -->
         </b-card>
@@ -28,15 +28,7 @@ import {mapState} from 'vuex'
     name: "BibleBook",
 
 
-/*beforeCreated()
-{
-
-    //  this.verseText = this.$store.state.verseText
-},
-*/
 mounted(){
-  //console.log(this.$store.state.verseText);
-  //console.log(this.verseText);
  this.$store.state.isVisible;
  this.$store.state.bookname;
  this.$store.state.chapterNum;
@@ -60,87 +52,9 @@ methods:{
       
            
           this.$store.commit("getVerses", num);
-          //console.log(this.$store.state.verseText)
-          //console.log(this.verseText)
+          console.log(this.$store.state.isVisible);
   }
 },
-/*
-
-
-    
- components:{
-        Chapter
-      },
-    
- methods:{
-  
-    getBook(name){
-        bookname = name
-          console.log(bookname)
-    },
-
-  getVerses(num) {
-//    this.data =[] 
-      this.chapterNum = num
-      
-      //this is not bound inside axios.then(function). Assigning this to a variable allows us to refer to data property 
-      var Text = this; 
-      //this.verseText = "Changed"
-        console.log(this.chapterNum) 
-    axios.get('https://api.lsm.org/recver.php?String='+bookname+num+'&Out=json')
-    
-    // 
-    .then(function(response){
-        
-     Text.verseText = response.data.verses[0].text       
-     console.log(Text.verseText) 
-            })
-axios.get('https://api.lsm.org/recver.php?String='+bookname+num+':31-60'+'&Out=json')
- .then(response=> (
-         verseText = response.data.verses[0].ref  
-       //console.log(response.data.verses[0].ref)
-           
-           ))
-            console.log(verseText)
-            
-  }
-
-   
-    
- var rcvverses=this.verse
-    var rcvverses2=this.verse2
-    
-    var verseRef
-    var verseText
-    
-    var i
-    var j
-    
-    for (i=0; i<30; i++)
-    {
-    
-    verseRef = rcvverses.data.verses[i].ref
-    verseText = rcvverses.data.verses[i].text
-     
-    console.log (verseRef+" "+verseText)
-    }
-
-    for(j=0; j<30; j++){
-              
-    verseRef = rcvverses2.data.verses[j].ref
-    verseText = rcvverses2.data.verses[j].text
-     
-    console.log (verseRef+" "+verseText)
-    if (verseText.startsWtih("No such verse"))
-    {
-      return
-    }
-
-      
-    }
-    
-       }
-*/
     }
   
 
@@ -149,4 +63,11 @@ axios.get('https://api.lsm.org/recver.php?String='+bookname+num+':31-60'+'&Out=j
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+   transition: opacity .5s;
+ }
+ .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+   opacity: 0;
+ }
+
 </style>

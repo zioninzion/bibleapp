@@ -10,6 +10,7 @@ const axios = require("axios");
 export default new Vuex.Store({
   state: {
     isVisible: true,
+    isChapter: false,
     bookname: "",
     verseText: "",
     verseNum: "",
@@ -105,7 +106,7 @@ export default new Vuex.Store({
       // When a user presses the button of a chapter number this variable sets to false and hides
       // the Bible book component
       state.isVisible = false;
-
+      state.isChapter = true;
       //This variable saves the chapter number that the user requested
       state.chapterNum = num;
 
