@@ -1,5 +1,5 @@
 <template>
-<div role="tablist" v-show="$store.state.isVisible">
+<div role="tablist" v-show="$store.state.isVisible" :key="componentKey">
       
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
     <b-card no-body class="mb-1" v-for="book in books" :bkey="book.name" v-bind:key="book.name" :chapters="book.chapters">
@@ -26,7 +26,11 @@
 import {mapState} from 'vuex'    
   export default{
     name: "BibleBook",
-
+      data() {
+     return {
+       componentKey: 0,
+     };
+   },
 
 mounted(){
  this.$store.state.isVisible;
@@ -53,6 +57,7 @@ methods:{
            
           this.$store.commit("getVerses", num);
           console.log(this.$store.state.isVisible);
+          this.componentKey+=1
   }
 },
     }
