@@ -5,11 +5,21 @@
     </b-button>
     <br>
     <br>
-    <h3 align="left">{{$store.state.bookname +" "+$store.state.chapterNum}}</h3>
+    <h3 align="left">{{currentChapter}}</h3>
     <br>
     <p v-for="num in $store.state.verseNum" :key="num">{{num +" "+ $store.state.verseArray[num-1]}}</p>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <transition name ="fade">
-   <b-button-toolbar key-nav aria-label="Toolbar with button groups">
+   <b-button-toolbar  key-nav aria-label="Toolbar with button groups">
     <b-button-group class="mx-1">
       <b-button>&laquo;</b-button>
       <b-button>&lsaquo;</b-button>
@@ -37,8 +47,21 @@ mounted(){
   console.log(this.componentKey)
 this.$store.state.isChapter;
 this.$store.state.isVisible;
+this.$store.state.bookchapter.name;
 //this.$store.state.bookname;
 },
+
+computed:{
+currentChapter: function(){
+                  return this.$store.state.bookchapter.name + " "+this.$store.state.bookchapter.cnumber
+                }
+         },
+
+watch:{
+versesPrint: function(num){
+        this.$store.state.verseArray[num]
+        }
+      },
 
  methods:{
   

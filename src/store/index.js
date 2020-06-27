@@ -17,6 +17,7 @@ export default new Vuex.Store({
     chapterNum: 0,
     verseArray: [],
     asyncRequests: [],
+    bookchapter: {},
     books: [
       { name: "Genesis", chapters: 50 },
       { name: "Exodus", chapters: 40 },
@@ -103,6 +104,7 @@ export default new Vuex.Store({
     // async function to fetch the verses from an api url
 
     async getVerses(state, num) {
+      state.bookchapter = { name: "", cnumber: "" };
       // When a user presses the button of a chapter number this variable sets to false and hides
       // the Bible book component
       state.isVisible = false;
@@ -194,6 +196,7 @@ export default new Vuex.Store({
       ])
 
         .then(function(response) {
+          state.bookchapter = { name: state.bookname, cnumber: num };
           for (var i = 0; i < response.length; i++) {
             for (var j = 0; j < 30; j++) {
               // Take the data in the response array and store it inside the verseText variable.
