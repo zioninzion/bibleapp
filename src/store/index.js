@@ -99,7 +99,8 @@ export default new Vuex.Store({
 
   //Grab book name and total chapters after user clicks the Bible book button
   mutations: {
-
+     
+    // {} allow for mutations to return multiple parameters
     getBook(state, {name, chapter}) {
       console.log("Tot chapters are "+ name+ chapter)
       state.bookname=name

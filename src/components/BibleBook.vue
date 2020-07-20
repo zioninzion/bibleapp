@@ -59,7 +59,8 @@ methods:{
       
            
           this.$store.commit("getVerses", num);
-          this.componentKey+=1
+          this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
+                                // component that's been resetted to closed accordion view
   }
 },
     }
