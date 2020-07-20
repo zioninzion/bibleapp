@@ -110,17 +110,29 @@ returnBooks: function(){
 },
 
   previousBook(bookname){
-    var index=0;
     // Get the index of the current book inside the books array
-    index = this.$store.state.books.map(function(e) {
+    var index = this.$store.state.books.map(function(e) {
           return e.name;}).indexOf(bookname);
-    var newIndex = index-1 //Grab index of previous book
+    var newIndex = "";
+    if(index >0){
+    newIndex = index-1 //Grab index of previous book
     
       // Store name of previous book
     this.$store.state.bookname = this.$store.state.books[newIndex].name  
     this.$store.commit("getVerses", 1);
     this.componentKey+=1
     this.$store.state.buttonVisible=false
+    }
+    else{
+
+        // If index is 0 go to last index of array 
+      this.$store.state.bookname = this.$store.state.books[this.$store.state.books.length-1].name
+      this.$store.commit("getVerses", 1);
+      this.componentKey+=1
+      this.$store.state.buttonVisible=false
+
+
+    }
   },
   
   nextBook(bookname){
@@ -128,13 +140,27 @@ returnBooks: function(){
     // Get the index of the current book inside the books array
     index = this.$store.state.books.map(function(e) {
           return e.name;}).indexOf(bookname);
-    var newIndex = index+1 //Grab index of next book
+    var newIndex = "";
     
-      // Store name of previous book inside bookname variable
+    if(index<this.$store.state.books.length-1)
+    {
+    newIndex = index+1 //Grab index of next book
+    
+      // Store name of next book inside bookname variable
     this.$store.state.bookname = this.$store.state.books[newIndex].name  
     this.$store.commit("getVerses", 1);
     this.componentKey+=1
     this.$store.state.buttonVisible=false
+    }
+    else{
+
+          // If index is last element in the array go to the beginning of the array
+       this.$store.state.bookname = this.$store.state.books[0].name
+       this.$store.commit("getVerses", 1);
+       this.componentKey+=1
+       this.$store.state.buttonVisible=false
+
+    }
   },
 
  reloadPage(){
