@@ -6,7 +6,7 @@
       <b-card-header header-tag="header" class="p-1" role="tab"> 
       <!--Used v-b-toogle with Vue dynamic argument to grab the specific id of each card.
          This ensures that only one card changes toggle state from visibile to invisible -->  
-      <b-button block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name)" variant="info">{{book.name}}</b-button>
+      <b-button block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name, book.chapters)" variant="info">{{book.name}}</b-button>
       </b-card-header>
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
        <b-card v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number);">
@@ -36,6 +36,7 @@ mounted(){
  this.$store.state.isVisible;
  this.$store.state.bookname;
  this.$store.state.chapterNum;
+ this.$store.state.totalChapters;
 },
 
 
@@ -48,15 +49,16 @@ computed: mapState({
     },
 
 methods:{
-  getBook(name){
-           this.$store.commit("getBook", name);
+  getBook(name, chapter){
+           this.$store.commit("getBook", {
+               name, chapter // Allows for multiple parameters
+           });
        },
       
   getVerses(num){
       
            
           this.$store.commit("getVerses", num);
-          console.log(this.$store.state.isVisible);
           this.componentKey+=1
   }
 },

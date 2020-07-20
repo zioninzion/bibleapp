@@ -42,6 +42,7 @@ mounted(){
 this.$store.state.isChapter;
 this.$store.state.isVisible;
 this.$store.state.bookchapter.name;
+console.log("Total chapters are " +this.$store.state.totalChapters)
 
 //this.$store.state.bookname;
 
@@ -75,23 +76,23 @@ chapterNumber: function(){
 
 
   nextChapter(num) { 
-      if(num<this.$store.state.books.chapters){
+      console.log("Total chapters are "+this.$store.totalChapters)
+      if(num<this.$store.state.totalChapters){
+      num=num+1
       this.$store.commit("getVerses", num);
       this.componentKey+=1
       this.$store.state.buttonVisible=false
       }
       else{
-      num=num +1
+  
       this.$store.commit("getVerses", num);
       this.componentKey+=1
       this.$store.state.buttonVisible=false
       }
   
-
-              
-
       
-       },
+},
+
  reloadPage(){
     this.$store.state.isChapter=false
       this.$store.state.isVisible=true

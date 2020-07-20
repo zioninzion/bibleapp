@@ -15,6 +15,7 @@ export default new Vuex.Store({
     bookname: "",
     verseText: "",
     verseNum: "",
+    totalChapters: "",
     chapterNum: 0,
     verseArray: [],
     asyncRequests: [],
@@ -96,11 +97,16 @@ export default new Vuex.Store({
     },
   },
 
-  //Grab book name after user clicks the Bible book button
+  //Grab book name and total chapters after user clicks the Bible book button
   mutations: {
-    getBook(state, name) {
-      state.bookname = name;
-      
+
+    getBook(state, {name, chapter}) {
+      console.log("Tot chapters are "+ name+ chapter)
+      state.bookname=name
+      state.totalChapters=chapter
+      //this.getName('name', name);
+      //this.getChapters('chapter', chapter); 
+      console.log("Tot chapters are "+ state.bookname+state.totalChapters)
     },
 
     // async function to fetch the verses from an api url
@@ -183,9 +189,9 @@ export default new Vuex.Store({
       } catch (err) {
         console.log(err);
       }
-      for (var i = 0; i < state.asyncRequests.length; i++) {
-        console.log(state.asyncRequests[i]);
-      }
+      //for (var i = 0; i < state.asyncRequests.length; i++) {
+        //console.log(state.asyncRequests[i]);
+      //}
       // Promise.all takes the requests we just made and executes them in a certain order with the
       // .then function method. The responses variable is an array that holds the data
       await Promise.all([
