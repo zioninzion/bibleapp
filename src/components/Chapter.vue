@@ -11,26 +11,20 @@
     <br>
     <br>
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    <div v-if="$store.state.buttonVisible">
     <transition name ="fade">
-   <b-button-toolbar  key-nav aria-label="Toolbar with button groups">
+   <b-button-toolbar v-cloak key-nav aria-label="Toolbar with button groups">
     <b-button-group class="mx-1">
       <b-button>&laquo;</b-button>
-      <b-button>&lsaquo;</b-button>
+     <b-button v-on:click.passive="previousChapter(chapterNumber);">&lsaquo;</b-button>
     </b-button-group>
     <b-button-group class="mx-1">
-      <b-button>&rsaquo;</b-button>
+      <b-button v-on:click.passive="nextChapter(chapterNumber);">&rsaquo;</b-button>
       <b-button>&raquo;</b-button>
     </b-button-group>
   </b-button-toolbar>     
   </transition>
-    
+    </div>
   </div>
 </template>
 
@@ -48,31 +42,50 @@ mounted(){
 this.$store.state.isChapter;
 this.$store.state.isVisible;
 this.$store.state.bookchapter.name;
+
 //this.$store.state.bookname;
+
 },
 
 computed:{
 currentChapter: function(){
                   return this.$store.state.bookchapter.name + " "+this.$store.state.bookchapter.cnumber
-                }
-         },
-
-watch:{
-versesPrint: function(num){
-        this.$store.state.verseArray[num]
-        }
-      },
-
+                },
+         
+chapterNumber: function(){
+	return this.$store.state.bookchapter.cnumber
+	},
+},
  methods:{
   
 
   previousChapter(num) { 
-      this.$store.commit("previousChapter", num);
+      if(num>1){
+      num = num-1
+      this.$store.commit("getVerses", num);
+      this.componentKey+=1
+      this.$store.state.buttonVisible=false
+      }
+      else{
+      this.$store.commit("getVerses", num);
+      this.componentKey+=1
+      this.$store.state.buttonVisible=false
+      }
   },
 
 
   nextChapter(num) { 
-      this.$store.commit("nextChapter", num);
+      if(num<this.$store.state.books.chapters){
+      this.$store.commit("getVerses", num);
+      this.componentKey+=1
+      this.$store.state.buttonVisible=false
+      }
+      else{
+      num=num +1
+      this.$store.commit("getVerses", num);
+      this.componentKey+=1
+      this.$store.state.buttonVisible=false
+      }
   
 
               
@@ -83,6 +96,7 @@ versesPrint: function(num){
     this.$store.state.isChapter=false
       this.$store.state.isVisible=true
       this.componentKey +=1
+      this.$store.state.buttonVisible=false
   //    console.log(this.componentKey)
   }
     }
@@ -98,4 +112,8 @@ versesPrint: function(num){
      .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
        opacity: 0;
      }
+[v-cloak]{
+
+	display: none;
+}
 </style>

@@ -11,6 +11,7 @@ export default new Vuex.Store({
   state: {
     isVisible: true,
     isChapter: false,
+    buttonVisible: false,
     bookname: "",
     verseText: "",
     verseNum: "",
@@ -99,6 +100,7 @@ export default new Vuex.Store({
   mutations: {
     getBook(state, name) {
       state.bookname = name;
+      
     },
 
     // async function to fetch the verses from an api url
@@ -218,23 +220,10 @@ export default new Vuex.Store({
         .catch(function(error) {
           console.log(error);
         });
+      state.buttonVisible = true;
     },
   },
-  async previousChapter(num) {
-    if (num >= 1) {
-      this.getVerses(num - 1);
-    } else {
-      this.getVerses(num);
-    }
-  },
 
-  async nextChapter(state, num) {
-    if (num <= state.books.chapters) {
-      this.getVerses(num + 1);
-    } else {
-      this.getVerses(num);
-    }
-  },
 
   actions: {},
 });
