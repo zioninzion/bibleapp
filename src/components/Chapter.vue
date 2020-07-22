@@ -7,7 +7,7 @@
     <br>
     <h3 align="left">{{currentChapter}}</h3>
     <!--Add (num, index) to avoid duplicate keys error-->
-    <p v-for="(chapNumber, i) in $store.state.totalChapters" :key="i" v-on:click.passive="getVerses(chapNumber);">{{chapNumber}}</p>
+    <p v-for="(chapNumber, i) in $store.state.totalChapters" :key="i" v-on:click.passive="getVerses(chapNumber);"><u>{{chapNumber}}</u></p>
     <br>
     <p v-for="(num, i) in $store.state.verseNum" :key="'num'+i">{{num +" "+ $store.state.verseArray[num-1]}}</p>
     <br>

@@ -9,10 +9,11 @@
       <b-button block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name, book.chapters)" variant="info">{{book.name}}</b-button>
       </b-card-header>
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
-        <b-row cols="10">
+        <b-row cols="6">
 	<!--<b-card-group deck>-->
        <b-card tabindex="0" class="chapter_menu" v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number);">
-         <b-card-text>{{number}}</b-card-text>
+         <b-card-text class="small">{{number}}</b-card-text>
+         
        <!--  <b-card-text>{{$store.state.verseText}}</b-card-text> -->
         </b-card>
 <!--</b-card-group>-->
@@ -83,9 +84,13 @@ methods:{
  }
 .chapter_menu{
 border-style: solid;
-border-width: 3px;
-height: 50px;
-width: 10%;
+border-width: 2px;
+height: 30px;
+width: 40px;
 }
 
+.small{
+position: relative;
+bottom: 15px;
+}
 </style>
