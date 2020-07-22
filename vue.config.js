@@ -1,5 +1,5 @@
 // vue.config.js
 module.exports = {
-publicPath: process.env.NODE_ENV!= "development" ? "/bibleapp/" : "/",
+publicPath: process.env.NODE_ENV!= "production" ? "/bibleapp/" : "/",
 };
 
