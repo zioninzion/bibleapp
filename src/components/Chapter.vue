@@ -7,7 +7,7 @@
     <br>
     <h3 align="left">{{currentChapter}}</h3>
     <!--Add (num, index) to avoid duplicate keys error-->
-    <p v-for="(chapNumber, i) in $store.state.totalChapters" :key="i" v-on:click.passive="getVerses(chapNumber);"><u>{{chapNumber}}</u></p>
+    <!--<td v-for="(chapNumber, i) in $store.state.totalChapters" :key="i" v-on:click.passive="getVerses(chapNumber);"><u>{{chapNumber}}</u></td>-->
     <br>
     <p v-for="(num, i) in $store.state.verseNum" :key="'num'+i">{{num +" "+ $store.state.verseArray[num-1]}}</p>
     <br>
@@ -15,7 +15,7 @@
     <br>
     <div v-if="$store.state.buttonVisible">
     <transition name ="fade">
-   <b-button-toolbar v-cloak key-nav aria-label="Toolbar with button groups">
+   <b-button-toolbar class="center" v-cloak key-nav aria-label="Toolbar with button groups">
     <b-button-group class="mx-1">
       <b-button v-on:click.passive="previousBook(returnBooks);">&laquo;</b-button>
      <b-button v-on:click.passive="previousChapter(chapterNumber);">&lsaquo;</b-button>
@@ -186,5 +186,11 @@ returnBooks: function(){
 [v-cloak]{
 
 	display: none;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+
 }
 </style>
