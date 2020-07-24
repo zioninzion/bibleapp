@@ -2,17 +2,20 @@
   <div id="app">
   <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     -->
-    <b-button v-on:click="show = true" v-show="$store.state.isVisible">
+    <b-button class="btn btn-primary btn-lg buttontab" v-on:click="show = true" v-show="$store.state.isVisible">
     Bible
      
     </b-button>
 
-    <b-button v-on:click="show = false" v-show="$store.state.isVisible">
+    <b-button class="btn btn-secondary btn-lg buttontab" v-on:click="show = false" v-show="$store.state.isVisible">
     Plan
      </b-button>
-  <transition name="fade">
-    <p v-if="show==true"><BibleBook/><Chapter/></p>
-    <p v-else-if="show==false"><Plan/><Chapter/></p>
+ <transition name="fade">
+
+    <!--Use v-show instead of v-if for faster rendering-->
+    <div v-show="show==true"><BibleBook/><Chapter/></div>
+    <div v-show="show==false"><Plan/><Chapter/></div>
+
   </transition>
   </div>
 </template>
@@ -45,7 +48,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
@@ -53,6 +56,10 @@ export default {
   opacity: 0;
 }
 
-
+.buttontab{
+width:50%;
+background-color:gray;
+border-style:ridge;
 }
+
 </style>

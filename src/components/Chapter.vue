@@ -1,7 +1,7 @@
 <template>
   <div v-show="$store.state.buttonVisible" :key="componentKey">
     <b-button v-cloak block variant="primary" v-on:click="reloadPage()">
-{{Menu}}
+{{$store.state.bookchapter.name}}
     </b-button>
     <br>
     <br>
