@@ -1,16 +1,17 @@
 <template>
   <div v-show="$store.state.buttonVisible" :key="componentKey">
     <b-button class="chapter_button" v-cloak block variant="primary" v-on:click="reloadPage()">
-<span style="position:left">&#9666;</span>
+<i class="fa fa-angle-left" style="float:left"></i>
 {{$store.state.bookchapter.name}}
     </b-button>
     <br>
     <br>
-    <h3 align="left">{{currentChapter}}</h3>
+    <h3>{{currentChapter}}</h3>
     <!--Add (num, index) to avoid duplicate keys error-->
     <!--<td v-for="(chapNumber, i) in $store.state.totalChapters" :key="i" v-on:click.passive="getVerses(chapNumber);"><u>{{chapNumber}}</u></td>-->
     <br>
-    <p v-for="(num, i) in $store.state.verseNum" :key="'num'+i">{{num +" "+ $store.state.verseArray[num-1]}}</p>
+    
+    <p style="" v-for="(num, i) in $store.state.verseNum" :key="'num'+i"><sup>{{num}}</sup>{{" "+ $store.state.verseArray[num-1]}}</p>
     <br>
     <br>
     <br>
@@ -190,16 +191,18 @@ returnBooks: function(){
 }
 
 .center {
-  margin: auto;
-  width: 50%;
-
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .chapter_button{
-text-align:center;
 background-color:gray;
 color:white;
 border-style:none;
 }
 
+h3, p{
+text-align:left; margin-left:20px;
+}
 </style>

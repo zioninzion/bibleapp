@@ -6,7 +6,7 @@
       <b-card-header header-tag="header" class="p-1" role="tab"> 
       <!--Used v-b-toogle with Vue dynamic argument to grab the specific id of each card.
          This ensures that only one card changes toggle state from visibile to invisible -->  
-      <b-button class="bible_button" block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name, book.chapters)" variant="info">{{book.name}}<i class="fa fa-caret-down"></i></b-button>
+      <b-button class="bible_button" block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name, book.chapters)" variant="info">{{book.name}}<i class="caret_right fa fa-angle-right"></i></b-button>
       </b-card-header>
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
         <b-row cols="6" style="margin:0px;">
@@ -90,6 +90,10 @@ color:#696969;
 border-style:none;
 }
 
+.caret_right{
+float:right;
+
+}
 
 .small{
 position: relative;
