@@ -16,7 +16,7 @@
     <div v-if="$store.state.buttonVisible">
     <transition name ="fade">
    <b-button-toolbar class="center" v-cloak key-nav aria-label="Toolbar with button groups">
-    <b-button-group class="mx-1">
+    <b-button-group class="mx-1" style="padding-right:50px;">
       <b-button style="margin-right:10px;" v-on:click.passive="previousBook(returnBooks);">&laquo;</b-button>
      <b-button v-on:click.passive="previousChapter(chapterNumber);">&lsaquo;</b-button>
     </b-button-group>

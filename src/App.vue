@@ -9,7 +9,7 @@
     </b-button>
 
     <!--<b-button class="btn btn-secondary btn-lg buttontab" style="border-color:white; background-color:gray; border-style:groove;" v-on:click="show = false" v-show="$store.state.isVisible">
-    Plan
+    Reading Plan
      </b-button>-->
  <transition name="fade">
 
