@@ -2,15 +2,15 @@
 <div role="tablist" v-show="$store.state.isVisible" :key="componentKey">
       
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
-    <b-card no-body style="padding-right:0px;" class="mb-1" v-for="book in books" :bkey="book.name" v-bind:key="book.name" :chapters="book.chapters">
-      <b-card-header header-tag="header" class="p-1" role="tab"> 
+    <b-card no-body style="border-style:none" class="mb-1" v-for="book in books" :bkey="book.name" v-bind:key="book.name" :chapters="book.chapters">
+      <b-card-header header-tag="header" style="border-style:none" class="p-1" role="tab"> 
       <!--Used v-b-toogle with Vue dynamic argument to grab the specific id of each card.
          This ensures that only one card changes toggle state from visibile to invisible -->  
       <b-button class="bible_button" block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name, book.chapters)" v-on:click="rotate = !rotate" variant="info">{{book.name}} 
       <i class="caret_right fa fa-angle-right"></i>
       </b-button>
       </b-card-header>
-      <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
+      <b-collapse v-bind:id="book.name" style="margin-bottom:10px;" invisible accordion="my-accordion" role="tabpanel">
         <b-row cols="6" style="margin:0px;">
 	<!--<b-card-group deck>-->
        <b-button tabindex="0" class="chapter_card" v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number);">
