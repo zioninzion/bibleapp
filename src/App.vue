@@ -8,24 +8,24 @@
      
     </b-button>
 
-    <b-button class="btn btn-secondary btn-lg buttontab" style="border-color:white; background-color:gray; border-style:groove;" v-on:click="show = false" v-show="$store.state.isVisible">
+    <!--<b-button class="btn btn-secondary btn-lg buttontab" style="border-color:white; background-color:gray; border-style:groove;" v-on:click="show = false" v-show="$store.state.isVisible">
     Plan
-     </b-button>
+     </b-button>-->
  <transition name="fade">
 
     <!--Use v-show instead of v-if for faster rendering-->
     <div v-show="show==true"><BibleBook/><Chapter/></div>
- </transition>
- <transition name="fade">
+</transition>
+<!-- <transition name="fade">
 <div v-show="show==false"><Plan/><Chapter/></div>
 
-  </transition>
+  </transition>-->
   </div>
 </template>
 
 <script>
 import BibleBook from './components/BibleBook.vue'
-import Plan from './components/Plan.vue'
+//import Plan from './components/Plan.vue'
 import Chapter from './components/Chapter.vue'
 export default {
   name: 'App',
@@ -36,7 +36,7 @@ export default {
   },
   components: {
    BibleBook,
-   Plan,
+   //Plan,
    Chapter,
   },
 }
@@ -59,7 +59,7 @@ export default {
 }
 
 .buttontab{
-width:50%;
+width:100%;
 }
 
 </style>
