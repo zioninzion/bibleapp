@@ -1,6 +1,7 @@
 <template>
   <div v-show="$store.state.buttonVisible" :key="componentKey">
-    <b-button v-cloak block variant="primary" v-on:click="reloadPage()">
+    <b-button class="chapter_button" v-cloak block variant="primary" v-on:click="reloadPage()">
+<span style="position:left">&#9666;</span>
 {{$store.state.bookchapter.name}}
     </b-button>
     <br>
@@ -193,4 +194,12 @@ returnBooks: function(){
   width: 50%;
 
 }
+
+.chapter_button{
+text-align:center;
+background-color:gray;
+color:white;
+border-style:none;
+}
+
 </style>

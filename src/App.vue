@@ -1,20 +1,23 @@
 <template>
   <div id="app">
-  <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    -->
-    <b-button class="btn btn-primary btn-lg buttontab" v-on:click="show = true" v-show="$store.state.isVisible">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <b-button class="btn btn-primary btn-lg buttontab"  style="border-color:white; background-color:gray; border-style:groove;" v-on:click="show = true" v-show="$store.state.isVisible">
     Bible
      
     </b-button>
 
-    <b-button class="btn btn-secondary btn-lg buttontab" v-on:click="show = false" v-show="$store.state.isVisible">
+    <b-button class="btn btn-secondary btn-lg buttontab" style="border-color:white; background-color:gray; border-style:groove;" v-on:click="show = false" v-show="$store.state.isVisible">
     Plan
      </b-button>
  <transition name="fade">
 
     <!--Use v-show instead of v-if for faster rendering-->
     <div v-show="show==true"><BibleBook/><Chapter/></div>
-    <div v-show="show==false"><Plan/><Chapter/></div>
+ </transition>
+ <transition name="fade">
+<div v-show="show==false"><Plan/><Chapter/></div>
 
   </transition>
   </div>
@@ -47,7 +50,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
@@ -58,8 +60,6 @@ export default {
 
 .buttontab{
 width:50%;
-background-color:gray;
-border-style:ridge;
 }
 
 </style>
