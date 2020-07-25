@@ -6,16 +6,18 @@
       <b-card-header header-tag="header" class="p-1" role="tab"> 
       <!--Used v-b-toogle with Vue dynamic argument to grab the specific id of each card.
          This ensures that only one card changes toggle state from visibile to invisible -->  
-      <b-button class="bible_button" block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name, book.chapters)" variant="info">{{book.name}}<i class="caret_right fa fa-angle-right"></i></b-button>
+      <b-button class="bible_button" block v-b-toggle:[book.name] v-on:click.passive="getBook(book.name, book.chapters)" v-on:click="rotate = !rotate" variant="info">{{book.name}} 
+      <i class="caret_right fa fa-angle-right"></i>
+      </b-button>
       </b-card-header>
       <b-collapse v-bind:id="book.name" invisible accordion="my-accordion" role="tabpanel">
         <b-row cols="6" style="margin:0px;">
 	<!--<b-card-group deck>-->
-       <b-card tabindex="0" class="chapter_card" v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number);">
-         <b-card-text class="small">{{number}}</b-card-text>
-         
+       <b-button tabindex="0" class="chapter_card" v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number);">
+        <!-- <b-card-text class="small">{{number}}</b-card-text>-->
+         {{number}}
        <!--  <b-card-text>{{$store.state.verseText}}</b-card-text> -->
-        </b-card>
+        </b-button>
 <!--</b-card-group>-->
 	</b-row>
         </b-collapse>
@@ -24,7 +26,6 @@
   </div>
 </template>
   
-
 <script>
 
 //const axios = require("axios");
@@ -34,6 +35,7 @@ import {mapState} from 'vuex'
       data() {
      return {
        componentKey: 0,
+       rotate: true,
      };
    },
 
@@ -101,7 +103,8 @@ bottom: 5px;
 }
 
 .chapter_card{
-
+background-color:white;
+color:#696969; 
 border-style: none;
 height: 50px;
 box-shadow: 5px 10px #DCDCDC; 
@@ -112,7 +115,18 @@ margin-right:5px;
 }
 
 
+.rotate{
+    -moz-transition: all 2s linear;
+    -webkit-transition: all 2s linear;
+    transition: all 2s linear;
+}
 
+.rotate.down{
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
 
 
 
