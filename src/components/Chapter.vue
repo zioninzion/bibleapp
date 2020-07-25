@@ -13,17 +13,15 @@
     
     <p style="" v-for="(num, i) in $store.state.verseNum" :key="'num'+i"><sup>{{num}}</sup>{{" "+ $store.state.verseArray[num-1]}}</p>
     <br>
-    <br>
-    <br>
     <div v-if="$store.state.buttonVisible">
     <transition name ="fade">
    <b-button-toolbar class="center" v-cloak key-nav aria-label="Toolbar with button groups">
     <b-button-group class="mx-1">
-      <b-button v-on:click.passive="previousBook(returnBooks);">&laquo;</b-button>
+      <b-button style="margin-right:10px;" v-on:click.passive="previousBook(returnBooks);">&laquo;</b-button>
      <b-button v-on:click.passive="previousChapter(chapterNumber);">&lsaquo;</b-button>
     </b-button-group>
     <b-button-group class="mx-1">
-      <b-button v-on:click.passive="nextChapter(chapterNumber);">&rsaquo;</b-button>
+      <b-button style="margin-right:10px;" v-on:click.passive="nextChapter(chapterNumber);">&rsaquo;</b-button>
       <b-button v-on:click.passive="nextBook(returnBooks);">&raquo;</b-button>
     </b-button-group>
   </b-button-toolbar>     
@@ -194,12 +192,17 @@ returnBooks: function(){
   display:flex;
   justify-content:center;
   align-items:center;
+  margin-bottom:10px;
 }
 
 .chapter_button{
 background-color:gray;
 color:white;
 border-style:none;
+}
+
+button{
+background-color:gray;
 }
 
 h3, p{
