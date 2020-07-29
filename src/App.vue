@@ -3,6 +3,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--isVisible variable ensures that either the BibleBook or the Plan components will be visible at a time-->
     <b-button class="btn btn-primary btn-lg buttontab"  style="border-color:white; background-color:gray; border-style:groove;" v-on:click="show = true" v-show="$store.state.isVisible">
     Bible
      

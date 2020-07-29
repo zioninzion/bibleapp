@@ -12,13 +12,9 @@
       </b-card-header>
       <b-collapse v-bind:id="book.name" style="margin-bottom:10px;" invisible accordion="my-accordion" role="tabpanel">
         <b-row cols="6" style="margin:0px;">
-	<!--<b-card-group deck>-->
        <b-button tabindex="0" class="chapter_card" v-bind:id="book.name" v-for="number in book.chapters" ref="book.name" :key="number" v-on:click.passive="getVerses(number);">
-        <!-- <b-card-text class="small">{{number}}</b-card-text>-->
          {{number}}
-       <!--  <b-card-text>{{$store.state.verseText}}</b-card-text> -->
         </b-button>
-<!--</b-card-group>-->
 	</b-row>
         </b-collapse>
     </b-card>
@@ -28,7 +24,6 @@
   
 <script>
 
-//const axios = require("axios");
 import {mapState} from 'vuex'    
   export default{
     name: "BibleBook",
@@ -70,10 +65,8 @@ methods:{
                                 // component that's been resetted to closed accordion view
   }
 },
-    }
+}
   
-
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -106,7 +99,7 @@ bottom: 5px;
 background-color:white;
 color:#696969; 
 border-style: none;
-height: 50px;
+height: 40px;
 box-shadow: 5px 10px #DCDCDC; 
 margin-top:5px;
 margin-left:5px;

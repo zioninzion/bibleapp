@@ -1,21 +1,22 @@
 <template>
+  <!--buttonVisible variable becomes true after Bible text is rendered. This
+      ensures that all the buttons won't appear before the text does-->
   <div v-show="$store.state.buttonVisible" :key="componentKey">
-    <b-button class="chapter_button" v-cloak block variant="primary" v-on:click="reloadPage()">
+    <b-button class="chapter_button" block variant="primary" v-on:click="reloadPage()">
 <i class="fa fa-angle-left" style="float:left"></i>
 {{$store.state.bookchapter.name}}
     </b-button>
     <br>
     <br>
     <h3>{{currentChapter}}</h3>
-    <!--Add (num, index) to avoid duplicate keys error-->
-    <!--<td v-for="(chapNumber, i) in $store.state.totalChapters" :key="i" v-on:click.passive="getVerses(chapNumber);"><u>{{chapNumber}}</u></td>-->
+    <!--Added (num, index) to avoid duplicate keys error-->
     <br>
     
     <p style="" v-for="(num, i) in $store.state.verseNum" :key="'num'+i"><sup>{{num}}</sup>{{" "+ $store.state.verseArray[num-1]}}</p>
     <br>
     <div v-if="$store.state.buttonVisible">
     <transition name ="fade">
-   <b-button-toolbar class="center" v-cloak key-nav aria-label="Toolbar with button groups">
+   <b-button-toolbar class="center" key-nav aria-label="Toolbar with button groups">
     <b-button-group class="mx-1" style="padding-right:50px;">
       <b-button style="margin-right:10px;" v-on:click.passive="previousBook(returnBooks);">&laquo;</b-button>
      <b-button v-on:click.passive="previousChapter(chapterNumber);">&lsaquo;</b-button>
@@ -40,6 +41,7 @@
       Menu: "Main Menu",
     };
   },
+
 mounted(){
 this.componentKey;
 this.$store.state.isChapter;
@@ -100,7 +102,7 @@ returnBooks: function(){
       this.$store.state.buttonVisible=false
       }
       else{
-  
+       
       this.$store.commit("getVerses", num);
       this.componentKey+=1
       this.$store.state.buttonVisible=false
@@ -168,8 +170,7 @@ returnBooks: function(){
       this.$store.state.isVisible=true
       this.componentKey +=1
       this.$store.state.buttonVisible=false
-  //    console.log(this.componentKey)
-  }
+	}
     }
   } 
 
@@ -183,10 +184,7 @@ returnBooks: function(){
      .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
        opacity: 0;
      }
-[v-cloak]{
 
-	display: none;
-}
 
 .center {
   display:flex;
@@ -206,6 +204,6 @@ background-color:gray;
 }
 
 h3, p{
-text-align:left; margin-left:20px;
+text-align:left; margin-left:15px; margin-right:10px;
 }
 </style>

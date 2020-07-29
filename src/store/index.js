@@ -102,12 +102,8 @@ export default new Vuex.Store({
      
     // {} allow for mutations to return multiple parameters
     getBook(state, {name, chapter}) {
-      console.log("Tot chapters are "+ name+ chapter)
       state.bookname=name
       state.totalChapters=chapter
-      //this.getName('name', name);
-      //this.getChapters('chapter', chapter); 
-      console.log("Tot chapters are "+ state.bookname+state.totalChapters)
     },
 
     // async function to fetch the verses from an api url
@@ -190,9 +186,6 @@ export default new Vuex.Store({
       } catch (err) {
         console.log(err);
       }
-      //for (var i = 0; i < state.asyncRequests.length; i++) {
-        //console.log(state.asyncRequests[i]);
-      //}
       // Promise.all takes the requests we just made and executes them in a certain order with the
       // .then function method. The responses variable is an array that holds the data
       await Promise.all([
