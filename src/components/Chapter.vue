@@ -101,13 +101,6 @@ computed:{
   
  methods:{
   
-  getVerses(num){
-
-        this.$store.commit("getVerses", num);
-        this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook
-                                 // component that's been resetted to closed accordion view
-    },
- 
   previousChapter(num) { 
       if(num>1){
         num = num-1

@@ -1,4 +1,6 @@
 <template>
+
+<!--This component will appear while isVisible is true-->
 <div role="tablist" v-show="$store.state.isVisible" :key="componentKey">
       
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
