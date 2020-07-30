@@ -3,7 +3,8 @@
 <!--This component will appear while isVisible is true-->
 <div role="tablist" v-show="$store.state.isVisible" :key="componentKey">
       
-<!-- Used Vue v-for directive to Loop through book names and create copies of outer card container --> 
+<!-- Used Vue v-for directive to Loop through book names and create copies of outer card container.
+    Each card will have a button with a unique key id to match its name--> 
   <b-card no-body 
       style="border-style:none"
       class="mb-1" 
@@ -18,8 +19,8 @@
       class="p-1" 
       role="tab"> 
       
-      <!--Used v-b-toogle with Vue dynamic argument to grab the specific id of each card.
-         This ensures that only one card changes toggle state from visibile to invisible -->  
+      <!--Used v-b-toogle with Vue dynamic argument to grab the specific id of each button.
+         This ensures that only one button changes toggle state from visibile to invisible -->  
       <b-button 
         class="bible_button" 
         block v-b-toggle:[book.name] 
