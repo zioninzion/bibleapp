@@ -131,7 +131,9 @@ export default new Vuex.Store({
          * oing to the next one. Storing the requests inside an array assures the verses are printed in
          * the proper order
          */
-        state.asyncRequests[0] = await axios.get(
+	
+	
+	state.asyncRequests[0] = await axios.get(
           "https://api.lsm.org/recver.php?String=" +
             state.bookname +
             " " +
@@ -198,23 +200,52 @@ export default new Vuex.Store({
       ])
 
         .then(function(response) {
-          state.bookchapter = { name: state.bookname, cnumber: num };
+	console.log(response)	
+	state.bookchapter = { name: state.bookname, cnumber: num }; // Combines book name and total number of chapters into 									one variable
+              
+              // Cycle through each verse individually which are held in separate json arrays.
           for (var i = 0; i < response.length; i++) {
             for (var j = 0; j < 30; j++) {
-              // Take the data in the response array and store it inside the verseText variable.
-              // This helps us to cycle through each verse individually which are held in a json array.
-              Text.state.verseText = response[i].data.verses[j].text;
 
-              //The verse strings are stored in an array
-              state.verseArray[state.verseNum] = Text.state.verseText;
+		/* Some verses have a backslash character which breaks the json and causes the 
+		     * response variable to store the verses as a string instead of being transformed 
+		     * into an array object. We want to check and see if the response variable is a string. 
+		     * If it is then we remove any backslash characters and reparse the formatted json 
+		     * string into an array. Otherwise we just skip both the reformating and the parsing and just 
+		     * store the response array into a variable.  
+		*/
 
-              //Skips nonexistent verses
-              if (Text.state.verseText.startsWith("No such verse")) {
-                return Text.state.verseText;
-              }
+		if(typeof response[i].data == "string" && response[i].data.includes("\\")) 
+		{
+			// The replace function will look for all backslashes and replace them with an empty space
 
-              state.verseNum = +state.verseNum + 1;
-            }
+			var removeSlash = response[i].data.replace(/\\/g, "").replace(/\//g, "")
+			
+			// The JSON.parse function will turn the json string variable into an array
+			var parsed = JSON.parse(removeSlash)
+			for(var k = 0; k < parsed.verses.length; k++)
+			{	
+				// Verses are stored into another array
+				state.verseArray[state.verseNum] = parsed.verses[k].text;
+				//Skips nonexistent verses 
+				if (parsed.verses[k].text.startsWith("No such verse")) {
+					return Text.state.verseText;
+				}
+				state.verseNum = +state.verseNum + 1;
+			}
+		}
+		
+		else{
+			Text.state.verseText = response[i].data.verses[j].text;
+			//The verse strings are stored in an array
+			state.verseArray[state.verseNum] = Text.state.verseText;
+			//Skips nonexistent verses
+			if (Text.state.verseText.startsWith("No such verse")) {
+				return Text.state.verseText;
+			}
+			state.verseNum = +state.verseNum + 1;
+		}
+	}
           }
         })
         .catch(function(error) {
