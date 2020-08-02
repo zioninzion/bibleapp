@@ -203,20 +203,12 @@ export default new Vuex.Store({
       ])
 
         .then(function(response) {
-	console.log(response)	
 	state.bookchapter = { name: state.bookname, cnumber: num }; // Combines book name and total number of chapters into 									one variable
               
               // Cycle through each verse individually which are held in separate json arrays.
           for (var i = 0; i < response.length; i++) {
             for (var j = 0; j < 30; j++) {
-<<<<<<< HEAD
-=======
       
-              // Take the data in the response array and store it inside the verseText variable.
-              // This helps us to cycle through each verse individually which are held in a json array.
-              Text.state.verseText = response[i].data.verses[j].text;
->>>>>>> 2c0966124e2494f9fcb6d03d0a0018b6ef2e590d
-
 		/* Some verses have a backslash character which breaks the json and causes the 
 		     * response variable to store the verses as a string instead of being transformed 
 		     * into an array object. We want to check and see if the response variable is a string. 
