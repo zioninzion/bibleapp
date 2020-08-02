@@ -3,22 +3,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <!--isVisible variable ensures that either the BibleBook or the Plan components will be visible at a time-->
-    <b-button class="btn btn-primary btn-lg buttontab"  style="border-color:white; background-color:gray; border-style:groove;" v-on:click="show = true" v-show="$store.state.isVisible">
-    Bible
+    <b-button 
+      class="btn btn-primary btn-lg buttontab"  
+      style="border-color:white; background-color:gray; border-style:groove;" 
+      v-on:click="show = true" 
+      v-show="$store.state.isVisible">
+    
+      Bible
      
     </b-button>
 
-    <!--<b-button class="btn btn-secondary btn-lg buttontab" style="border-color:white; background-color:gray; border-style:groove;" v-on:click="show = false" v-show="$store.state.isVisible">
-    Reading Plan
-     </b-button>-->
- <transition name="fade">
+    <!--<b-button 
+      class="btn btn-secondary btn-lg buttontab" 
+      style="border-color:white; 
+      background-color:gray;
+      border-style:groove;"
+      v-on:click="show = false" 
+      v-show="$store.state.isVisible">
+      Reading Plan
+    </b-button>-->
+ 
+    <transition name="fade">
 
-    <!--Use v-show instead of v-if for faster rendering-->
-    <div v-show="show==true"><BibleBook/><Chapter/></div>
-</transition>
-<!-- <transition name="fade">
-<div v-show="show==false"><Plan/><Chapter/></div>
+      <!--Use v-show instead of v-if for faster rendering-->
+      <div v-show="show==true"><BibleBook/><Chapter/></div>
+    </transition>
+
+    <!-- <transition name="fade">
+      <div v-show="show==false"><Plan/><Chapter/></div>
 
   </transition>-->
   </div>
@@ -52,15 +66,17 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
+
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 
 .buttontab{
-width:100%;
+  width:100%;
 }
 
 </style>

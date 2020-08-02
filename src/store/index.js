@@ -107,13 +107,14 @@ export default new Vuex.Store({
     },
 
     // async function to fetch the verses from an api url
-
     async getVerses(state, num) {
       state.bookchapter = { name: "", cnumber: "" };
+      
       // When a user presses the button of a chapter number this variable sets to false and hides
       // the Bible book component
       state.isVisible = false;
       state.isChapter = true;
+      
       //This variable saves the chapter number that the user requested
       state.chapterNum = num;
 
@@ -123,6 +124,7 @@ export default new Vuex.Store({
       //The "this" keyword is not bound inside axios.then(function). Assigning this to a variable allows
       //us to refer to the "data" property
       var Text = this;
+     
       //Try catch block to log and capture errors
       try {
         /*
@@ -188,6 +190,7 @@ export default new Vuex.Store({
       } catch (err) {
         console.log(err);
       }
+      
       // Promise.all takes the requests we just made and executes them in a certain order with the
       // .then function method. The responses variable is an array that holds the data
       await Promise.all([
@@ -206,6 +209,13 @@ export default new Vuex.Store({
               // Cycle through each verse individually which are held in separate json arrays.
           for (var i = 0; i < response.length; i++) {
             for (var j = 0; j < 30; j++) {
+<<<<<<< HEAD
+=======
+      
+              // Take the data in the response array and store it inside the verseText variable.
+              // This helps us to cycle through each verse individually which are held in a json array.
+              Text.state.verseText = response[i].data.verses[j].text;
+>>>>>>> 2c0966124e2494f9fcb6d03d0a0018b6ef2e590d
 
 		/* Some verses have a backslash character which breaks the json and causes the 
 		     * response variable to store the verses as a string instead of being transformed 
