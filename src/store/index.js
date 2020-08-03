@@ -217,27 +217,32 @@ export default new Vuex.Store({
 		     * store the response array into a variable.  
 		*/
 
-		if(typeof response[i].data == "string" && response[i].data.includes("\\")) 
+		if(typeof response[i].data == "string" && response[i].data.includes("[")) 
 		{
-			// The replace function will look for all backslashes and replace them with an empty space
-
-			var removeSlash = response[i].data.replace(/\\/g, "").replace(/\//g, "")
+      // The replace function corrects the format "\[ \]" string returned for "Rom. 16:24", "Mark 9:44", and "Mark 9:46" for json parsing
+      // The replace function will look for all backslashes and replace them with nothing
+      var removeSlash = response[i].data.replace(/\\/g, "").replace(/\//g, "")
 			
 			// The JSON.parse function will turn the json string variable into an array
 			var parsed = JSON.parse(removeSlash)
 			for(var k = 0; k < parsed.verses.length; k++)
 			{	
+        // The replace function will look for all brakets [] and replace them with nothing
+        if (parsed.verses[k].ref !="Rom. 16:24" && parsed.verses[k].ref !="Mark 9:44" && parsed.verses[k].ref !="Mark 9:46") {
+          parsed.verses[k].text = parsed.verses[k].text.replace(/\[/g, "").replace(/\]/g, "")
+        }
+
 				// Verses are stored into another array
 				state.verseArray[state.verseNum] = parsed.verses[k].text;
 				//Skips nonexistent verses 
 				if (parsed.verses[k].text.startsWith("No such verse")) {
 					return Text.state.verseText;
-				}
-				state.verseNum = +state.verseNum + 1;
+        }
+        state.verseNum = +state.verseNum + 1;
 			}
 		}
 		
-		else{
+		else{      
 			Text.state.verseText = response[i].data.verses[j].text;
 			//The verse strings are stored in an array
 			state.verseArray[state.verseNum] = Text.state.verseText;
