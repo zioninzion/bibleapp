@@ -216,10 +216,10 @@ export default new Vuex.Store({
 		     * string into an array. Otherwise we just skip both the reformating and the parsing and just 
 		     * store the response array into a variable.  
 		*/
+      // The response format is a "\[ *verse* \]" string returned for "Rom. 16:24", "Mark 9:44", and "Mark 9:46" for json parsing
 
-		if(typeof response[i].data == "string" && response[i].data.includes("[")) 
+		if(typeof response[i].data == "string") 
 		{
-      // The replace function corrects the format "\[ \]" string returned for "Rom. 16:24", "Mark 9:44", and "Mark 9:46" for json parsing
       // The replace function will look for all backslashes and replace them with nothing
       var removeSlash = response[i].data.replace(/\\/g, "").replace(/\//g, "")
 			
@@ -227,7 +227,7 @@ export default new Vuex.Store({
 			var parsed = JSON.parse(removeSlash)
 			for(var k = 0; k < parsed.verses.length; k++)
 			{	
-        // The replace function will look for all brakets [] and replace them with nothing
+        // The replace function will look for all brakets [] and replace them with nothing excluding the three verses
         if (parsed.verses[k].ref !="Rom. 16:24" && parsed.verses[k].ref !="Mark 9:44" && parsed.verses[k].ref !="Mark 9:46") {
           parsed.verses[k].text = parsed.verses[k].text.replace(/\[/g, "").replace(/\]/g, "")
         }
@@ -242,8 +242,13 @@ export default new Vuex.Store({
 			}
 		}
 		
-		else{      
-			Text.state.verseText = response[i].data.verses[j].text;
+		else{
+      var verseText = response[i].data.verses[j].text
+      // The replace function will look for all brakets [] and replace them with nothing
+      if (verseText.includes('[')) {
+        verseText = verseText.replace(/\[/g, "").replace(/\]/g, "");
+      } 
+			Text.state.verseText = verseText;
 			//The verse strings are stored in an array
 			state.verseArray[state.verseNum] = Text.state.verseText;
 			//Skips nonexistent verses
