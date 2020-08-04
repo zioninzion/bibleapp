@@ -24,7 +24,6 @@
       <b-button 
         class="bible_button" 
         block v-b-toggle:[book.name] 
-        v-on:click.passive="getBook(book.name, book.chapters)" 
         v-on:click="rotate = !rotate" variant="info">
           {{book.name}} 
         <i class="caret_right fa fa-angle-right"></i>
@@ -44,11 +43,10 @@
           tabindex="0" 
           class="chapter_card" 
           v-bind:id="book.name" 
-          v-for="number in book.chapters" 
-          ref="book.name" 
-          :key="number" 
-          v-on:click.passive="getVerses(number);">
-            {{number}}
+          v-for="chapterNum in book.chapters" 
+          :key="chapterNum" 
+          v-on:click.passive="getVerses(book.name, chapterNum);">
+            {{chapterNum}}
         </b-button>
       </b-row>
     
@@ -74,9 +72,6 @@ import {mapState} from 'vuex'
 
 mounted(){
  this.$store.state.isVisible;
- this.$store.state.bookname;
- this.$store.state.chapterNum;
- this.$store.state.totalChapters;
 },
 
 
@@ -89,14 +84,10 @@ computed: mapState({
     },
 
 methods:{
-  getBook(name, chapter){
-           this.$store.commit("getBook", {
-               name, chapter // Allows for multiple parameters
-           });
-       },
-      
-  getVerses(num){          
-          this.$store.commit("getVerses", num);
+  getVerses(bookName, chapterNum){          
+          this.$store.commit("getVerses", {
+            bookName, chapterNum // Allows for multiple parameters
+            });
           this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
                                 // component that's been resetted to closed accordion view
   }

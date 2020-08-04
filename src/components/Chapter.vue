@@ -7,13 +7,12 @@
       block variant="primary" 
       v-on:click="reloadPage()">
       <i class="fa fa-angle-left" style="float:left"></i>
-        {{$store.state.bookchapter.name}}
     </b-button>
     
     <br>
     <br>
     
-    <h3>{{currentChapter}}</h3>
+    <h3>{{$store.state.currentSection}}</h3>
     
 
     <!--Added (num, index) to avoid duplicate keys error-->
@@ -29,35 +28,34 @@
     <br>
     <div v-if="$store.state.buttonVisible">
       <transition name ="fade">
-        <b-button-toolbar 
+      <b-button-toolbar 
           class="center" 
           key-nav aria-label="Toolbar with button groups">
-        <b-button-group 
-          class="mx-1" 
+        <b-button-group class="mx-1" 
           style="padding-right:50px;">
           <b-button 
             style="margin-right:10px;" 
-            v-on:click.passive="previousBook(returnBooks);">&laquo;
+            v-on:click.passive="navigate('previousBook');">&laquo;
           </b-button>
         
           <b-button 
-            v-on:click.passive="previousChapter(chapterNumber);">&lsaquo;
+            v-on:click.passive="navigate('previousChapter');">&lsaquo;
           </b-button>
         </b-button-group>
         
         <b-button-group class="mx-1">
           <b-button 
             style="margin-right:10px;" 
-            v-on:click.passive="nextChapter(chapterNumber);">&rsaquo;
+            v-on:click.passive="navigate('nextChapter');">&rsaquo;
           </b-button>
         
-        <b-button 
-          v-on:click.passive="nextBook(returnBooks);">&raquo;
-        </b-button>
-      </b-button-group>
+          <b-button 
+            v-on:click.passive="navigate('nextBook');">&raquo;
+          </b-button>
+        </b-button-group>
       </b-button-toolbar>     
-    </transition>
-  </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -76,116 +74,70 @@ mounted(){
   this.componentKey;
   this.$store.state.isChapter;
   this.$store.state.isVisible;
-  this.$store.state.bookchapter.name;
-  this.$store.state.totalChapters;
-  this.$store.state.books;
-
 },
 
 computed:{
-
-  
-  currentChapter: function(){
-    return this.$store.state.bookchapter.name + " "+this.$store.state.bookchapter.cnumber
-  },
-         
-  chapterNumber: function(){
-    return this.$store.state.bookchapter.cnumber
-	},
-
-  returnBooks: function(){
-    return this.$store.state.bookname         
-  },
-
 },
   
  methods:{
-  
-  previousChapter(num) { 
-      if(num>1){
-        num = num-1
-        this.$store.commit("getVerses", num);
-        this.componentKey+=1
-        this.$store.state.buttonVisible=false
+
+  // navigate previous or next book or chapter
+  navigate(instruction) {
+    var bookName = this.$store.state.bookName
+    var chapterNum = this.$store.state.chapterNum
+    var totalChapters = this.$store.state.totalChapters
+    var index = this.$store.state.bookIndex[bookName]
+
+    if (instruction == 'previousChapter') {
+      // If not the first chapter go previous chapter
+      if (chapterNum != 1) {
+        chapterNum -= 1
+        this.$store.commit("getVerses", {bookName, chapterNum})
       }
-      
-      else{
-        this.$store.commit("getVerses", num);
-        this.componentKey+=1
-        this.$store.state.buttonVisible=false
+      else {
+        this.navigate('previousBook')
       }
-  },
+    }
 
-
-  nextChapter(num) { 
-      if(num<this.$store.state.totalChapters){
-        num=num+1
-        this.$store.commit("getVerses", num);
-        this.componentKey+=1
-        this.$store.state.buttonVisible=false
+    if (instruction == 'nextChapter') {
+      // If not the last chapter go next chapter
+      if (chapterNum != totalChapters) {
+        chapterNum += 1
+        this.$store.commit("getVerses", {bookName, chapterNum})
       }
-      
-      else{
-        this.$store.commit("getVerses", num);
-        this.componentKey+=1
-        this.$store.state.buttonVisible=false
+      else {
+        this.navigate('nextBook')
       }
-      
-  },
-
-  previousBook(bookname){
-    // Get the index of the current book inside the books array
-    var index = this.$store.state.books.map(function(e) {
-          return e.name;}).indexOf(bookname);
-    var newIndex = "";
-    
-    if(index >0){
-      newIndex = index-1 //Grab index of previous book
-    
-      // Store name of previous book
-      this.$store.state.bookname = this.$store.state.books[newIndex].name  
-      this.$store.commit("getVerses", 1);
-      this.componentKey+=1
-      this.$store.state.buttonVisible=false
     }
-    
-    else{
 
-        // If index is 0 go to last index of array 
-      this.$store.state.bookname = this.$store.state.books[this.$store.state.books.length-1].name
-      this.$store.commit("getVerses", 1);
-      this.componentKey+=1
-      this.$store.state.buttonVisible=false
+    if (instruction == 'previousBook') {
+      // If not Genesis go to previous book
+      if (bookName != 'Genesis') {
+        index -= 1
+        bookName = this.$store.state.books[index].name
+        chapterNum = 1
+        this.$store.commit("getVerses", {bookName, chapterNum})
+      }
+      else {
+        return
+      }
     }
-  },
-  
-  nextBook(bookname){
-    var index=0;
-    // Get the index of the current book inside the books array
-    index = this.$store.state.books.map(function(e) {
-          return e.name;}).indexOf(bookname);
-    var newIndex = "";
-    
-    if(index<this.$store.state.books.length-1)
-    {
-      newIndex = index+1 //Grab index of next book
-    
-      // Store name of next book inside bookname variable
-      this.$store.state.bookname = this.$store.state.books[newIndex].name  
-      this.$store.commit("getVerses", 1);
-      this.componentKey+=1
-      this.$store.state.buttonVisible=false
+        
+    if (instruction == 'nextBook') {
+      // If not Revelation go to next book
+      if (bookName != 'Revelation') {
+        index += 1
+        bookName = this.$store.state.books[index].name
+        chapterNum = 1
+        this.$store.commit("getVerses", {bookName, chapterNum})
+      }
+      else {
+        return
+      }
     }
-    
-    else{
+    this.componentKey+=1
+    this.$store.state.buttonVisible=false
 
-          // If index is last element in the array go to the beginning of the array
-       this.$store.state.bookname = this.$store.state.books[0].name
-       this.$store.commit("getVerses", 1);
-       this.componentKey+=1
-       this.$store.state.buttonVisible=false
-
-    }
   },
 
  reloadPage(){
