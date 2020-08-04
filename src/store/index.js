@@ -314,8 +314,9 @@ export default new Vuex.Store({
       state.totalChapters = state.chapterCounts[bookName]
 
       // If until end of chapter => set end to last verse of chapter
-      if (end == true){
-        end = state.verseCounts[bookName][chapterNum-1]
+      var lastVerse = state.verseCounts[bookName][chapterNum-1]
+      if (end == true || end > lastVerse){
+        end = lastVerse
       }
 
       // If section title requested (true: Genesis 1:1-26) else print Genesis 1
