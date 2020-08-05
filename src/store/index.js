@@ -291,6 +291,55 @@ export default new Vuex.Store({
       "3 John": 63,
       "Jude": 64,
       "Revelation": 65,
+    },
+    bookAbbr: {
+      "Gen": "Genesis",
+      "Exo": "Exodus",
+      "Lev": "Leviticus",
+      "Num": "Numbers",
+      "Deut": "Deuteronomy",
+      "Josh": "Joshua",
+      "Judg": "Judges",
+      "1 Sam": "1 Samuel",
+      "2 Sam": "2 Samuel",
+      "1 Chron": "1 Chronicles",
+      "2 Chron": "2 Chronicles",
+      "Neh": "Nehemiah",
+      "Esth": "Esther",
+      "Psa": "Psalms",
+      "Psalm": "Psalms",
+      "Prov": "Proverbs",
+      "Eccl": "Ecclesiastes",
+      "SS": "Song of Solomon",
+      "Isa": "Isaiah",
+      "Jer": "Jeremiah",
+      "Lam": "Lamentations",
+      "Ezek": "Ezekiel",
+      "Dan": "Daniel",
+      "Oba": "Obadiah",
+      "Nahum": "Nahum",
+      "Hab": "Habakkuk",
+      "Zeph": "Zephaniah",
+      "Hag": "Haggai",
+      "Zech": "Zechariah",
+      "Mal": "Malachi",
+      "Matt": "Matthew",
+      "Rom": "Romans",
+      "1 Cor": "1 Corinthians",
+      "2 Cor": "2 Corinthians",
+      "Gal": "Galatians",
+      "Eph": "Ephesians",
+      "Phil": "Philippians",
+      "Col": "Colossians",
+      "1 Thes": "1 Thessalonians",
+      "2 Thes": "2 Thessalonians",
+      "1 Tim": "1 Timothy",
+      "2 Tim": "2 Timothy",
+      "Philem": "Philemon",
+      "Heb": "Hebrews",
+      "1 Pet": "1 Peter",
+      "2 Pet": "2 Peter",
+      "Rev": "Revelation",
     }
   },
 
@@ -301,12 +350,102 @@ export default new Vuex.Store({
     },
   },
 
+  actions: {
+    
+    // async Break verse list sections by book & chapter then getVerses()
+    // "Matt. 1; Matthew 2:4; Matt. 5:18-20; Psa. 145-146; Psalm 140:12-141:9"
+    async getVerseList({commit, state}, {verseString}){
+      
+
+      // Split into sectons: [Matt. 1, ..., Psalm 140:12-141:9]
+      var verseList = verseString.replace(/; /g, ";").split(';');
+
+      // Loop through verseList
+      for (var i = 0; i < verseList.length; i++) {
+
+        // Split by space between bookname and section
+        var str = verseList[i]
+        var bookName = str.substr(0, str.lastIndexOf(" "))
+        var section = str.substr(str.lastIndexOf(" ") + 1, str.length);
+        console.log(str,',',bookName,',',section)
+        
+        // Replace any abbreviations
+        bookName = bookName.replace(/\./g, "")
+        if (bookName in state.bookAbbr) {
+          bookName = state.bookAbbr[bookName]          
+        }
+
+        // Check if colons and dashes in section
+        var countDash =  (section.match(/-/g)||[]).length;
+        var countColon = (section.match(/:/g)||[]).length;
+        console.log(str,',',bookName,',',section)
+        console.log(countColon,',',countDash)
+        // Initialize vars
+        var chapterNum
+        var start
+        var end
+
+        // John 5:12-6:10
+        if (countDash == 1 && countColon == 2) {
+          // Split into chapter and verse
+          [chapterNum, start] = section.split("-")[0].split(':');
+          commit("getVerses", {bookName,chapterNum,start});
+          [chapterNum, end] = section.split("-")[1].split(':');
+          start = 1
+          commit("getVerses", {bookName,chapterNum,start,end});
+        }
+
+        // Matt. 5:18-20
+        else if (countDash == 1 && countColon == 1) {
+          [chapterNum, start] = section.split("-")[0].split(':');
+          end = section.split("-")[1];
+          commit("getVerses", {bookName,chapterNum,start,end});
+        }
+
+        // John 3-4
+        else if (countDash == 1 && countColon == 0) {
+          chapterNum = section.split("-")[0];
+          commit("getVerses", {bookName,chapterNum});
+          chapterNum = section.split("-")[1];
+          commit("getVerses", {bookName,chapterNum});
+        }
+
+        // Matthew 2:4;
+        else if (countDash == 0 && countColon == 1) {
+          [chapterNum, start] = section.split(":");
+          end = start
+          commit("getVerses", {bookName,chapterNum,start,end});
+        }
+        
+        // Matt. 1
+        else if (countDash == 0 && countColon == 0) {
+          chapterNum = section;
+          commit("getVerses", {bookName,chapterNum});
+        }
+      }
+    },
+  },
+
   //Grab book name and total chapters after user clicks the Bible book button
   mutations: {
-     
     // {} allow for mutations to return multiple parameters
+
     // async function to fetch the verses from an api url
-    async getVerses(state, {bookName, chapterNum, start = 1, end = true, sectionName = false}) {
+    async getVerses(state, {bookName, chapterNum, start, end, sectionName = false}) {
+      
+      if (start===undefined){
+        start = 1
+      }
+      if (end===undefined){
+        end = true
+      }   
+
+      // make sure proper integer formats
+      chapterNum = parseInt(chapterNum)
+      start = parseInt(start)
+      if (end !== true){
+        end = parseInt(end)
+      }
 
       // Stores requested book and chapter
       state.bookName = bookName
@@ -349,8 +488,8 @@ export default new Vuex.Store({
          */
   
   // Make requests in sections or 30 or less verses i.e. 1-29
-  var i = 0
-  var next = 0
+  var i = 0     // First request
+  var next = 0  // Last verse of request
   // If next == end, we have finished looping
   while (next != end ) {
     // Select next 30 verses unless end is reached
@@ -375,7 +514,7 @@ export default new Vuex.Store({
       
       // Promise.all takes the requests we just made and executes them in a certain order with the
       // .then function method. The responses variable is an array that holds the data
-      for (let index = 0; index < state.asyncRequests.length; index++) {
+      for (var index = 0; index < state.asyncRequests.length; index++) {
       await Promise.all([
         state.asyncRequests[index],
       ])
@@ -409,6 +548,8 @@ export default new Vuex.Store({
 
 				// Verses are stored into another array
         state.verseArray[state.verseNum] = parsed.verses[k].text;
+
+        // If reached end of verses return
         if (state.verseNum == end) {
           return
         }
@@ -425,6 +566,8 @@ export default new Vuex.Store({
 			Text.state.verseText = verseText;
 			//The verse strings are stored in an array
       state.verseArray[state.verseNum] = Text.state.verseText;
+
+      // If reached end of verses return
       if (state.verseNum == end) {
         return
       }
@@ -439,8 +582,7 @@ export default new Vuex.Store({
       state.buttonVisible = true;
       }
     },
+
   },
 
-
-  actions: {},
 });
