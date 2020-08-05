@@ -87,6 +87,7 @@ computed:{
     var chapterNum = this.$store.state.chapterNum
     var totalChapters = this.$store.state.totalChapters
     var index = this.$store.state.bookIndex[bookName]
+    console.log(bookName, chapterNum)
 
     if (instruction == 'previousChapter') {
       // If not the first chapter go previous chapter
@@ -96,6 +97,7 @@ computed:{
       }
       else {
         this.navigate('previousBook')
+        return
       }
     }
 
@@ -107,6 +109,7 @@ computed:{
       }
       else {
         this.navigate('nextBook')
+        return
       }
     }
 
