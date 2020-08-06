@@ -20,6 +20,7 @@ export default new Vuex.Store({
     verseArray: [],
     asyncRequests: [],
     bookchapter: {},
+    bookIndex: 0,
     books: [
       { name: "Genesis", chapters: 50 },
       { name: "Exodus", chapters: 40 },
@@ -88,74 +89,6 @@ export default new Vuex.Store({
       { name: "Jude", chapters: 1 },
       { name: "Revelation", chapters: 22 },
     ],
-    chapterCounts:  {
-      "Genesis": 50,
-      "Exodus": 40,
-      "Leviticus": 27,
-      "Numbers": 36,
-      "Deuteronomy": 34,
-      "Joshua": 24,
-      "Judges": 21,
-      "Ruth": 4,
-      "1 Samuel": 31,
-      "2 Samuel": 24,
-      "1 Kings": 22,
-      "2 Kings": 25,
-      "1 Chronicles": 29,
-      "2 Chronicles": 36,
-      "Ezra": 10,
-      "Nehemiah": 13,
-      "Esther": 10,
-      "Job": 42,
-      "Psalms": 150,
-      "Proverbs": 31,
-      "Ecclesiastes": 12,
-      "Song of Songs": 8,
-      "Isaiah": 66,
-      "Jeremiah": 52,
-      "Lamentations": 5,
-      "Ezekiel": 48,
-      "Daniel": 12,
-      "Hosea": 14,
-      "Joel": 3,
-      "Amos": 9,
-      "Obadiah": 1,
-      "Jonah": 4,
-      "Micah": 7,
-      "Nahum": 3,
-      "Habakkuk": 3,
-      "Zephaniah": 3,
-      "Haggai": 2,
-      "Zechariah": 14,
-      "Malachi": 4,
-      "Matthew": 28,
-      "Mark": 16,
-      "Luke": 24,
-      "John": 21,
-      "Acts": 28,
-      "Romans": 16,
-      "1 Corinthians": 16,
-      "2 Corinthians": 13,
-      "Galatians": 6,
-      "Ephesians": 6,
-      "Philippians": 4,
-      "Colossians": 4,
-      "1 Thessalonians": 5,
-      "2 Thessalonians": 3,
-      "1 Timothy": 6,
-      "2 Timothy": 4,
-      "Titus": 3,
-      "Philemon": 1,
-      "Hebrews": 13,
-      "James": 5,
-      "1 Peter": 5,
-      "2 Peter": 3,
-      "1 John": 5,
-      "2 John": 1,
-      "3 John": 1,
-      "Jude": 1,
-      "Revelation": 22
-    },
     verseCounts: {
       "Genesis": [31,25,24,26,32,22,24,22,29,32,32,20,18,24,21,16,27,33,38,18,34,24,20,67,34,35,46,22,35,43,55,32,20,31,29,43,36,30,23,23,57,38,34,34,28,34,31,22,33,26],
       "Exodus": [22,25,22,31,23,30,25,32,35,29,10,51,22,31,27,36,16,27,25,26,36,31,33,18,40,37,21,43,46,38,18,35,23,35,35,38,29,31,43,38],
@@ -223,74 +156,6 @@ export default new Vuex.Store({
       "3 John": [14],
       "Jude": [25],
       "Revelation": [20,29,22,11,14,17,17,13,21,11,19,18,18,20,8,21,18,24,21,15,27,21],
-    },
-    bookIndex: {
-      "Genesis": 0,
-      "Exodus": 1,
-      "Leviticus": 2,
-      "Numbers": 3,
-      "Deuteronomy": 4,
-      "Joshua": 5,
-      "Judges": 6,
-      "Ruth": 7,
-      "1 Samuel": 8,
-      "2 Samuel": 9,
-      "1 Kings": 10,
-      "2 Kings": 11,
-      "1 Chronicles": 12,
-      "2 Chronicles": 13,
-      "Ezra": 14,
-      "Nehemiah": 15,
-      "Esther": 16,
-      "Job": 17,
-      "Psalms": 18,
-      "Proverbs": 19,
-      "Ecclesiastes": 20,
-      "Song of Solomon": 21,
-      "Isaiah": 22,
-      "Jeremiah": 23,
-      "Lamentations": 24,
-      "Ezekiel": 25,
-      "Daniel": 26,
-      "Hosea": 27,
-      "Joel": 28,
-      "Amos": 29,
-      "Obadiah": 30,
-      "Jonah": 31,
-      "Micah": 32,
-      "Nahum": 33,
-      "Habakkuk": 34,
-      "Zephaniah": 35,
-      "Haggai": 36,
-      "Zechariah": 37,
-      "Malachi": 38,
-      "Matthew": 39,
-      "Mark": 40,
-      "Luke": 41,
-      "John": 42,
-      "Acts": 43,
-      "Romans": 44,
-      "1 Corinthians": 45,
-      "2 Corinthians": 46,
-      "Galatians": 47,
-      "Ephesians": 48,
-      "Philippians": 49,
-      "Colossians": 50,
-      "1 Thessalonians": 51,
-      "2 Thessalonians": 52,
-      "1 Timothy": 53,
-      "2 Timothy": 54,
-      "Titus": 55,
-      "Philemon": 56,
-      "Hebrews": 57,
-      "James": 58,
-      "1 Peter": 59,
-      "2 Peter": 60,
-      "1 John": 61,
-      "2 John": 62,
-      "3 John": 63,
-      "Jude": 64,
-      "Revelation": 65,
     },
     bookAbbr: {
       "Gen": "Genesis",
@@ -367,7 +232,6 @@ export default new Vuex.Store({
         var str = verseList[i]
         var bookName = str.substr(0, str.lastIndexOf(" "))
         var section = str.substr(str.lastIndexOf(" ") + 1, str.length);
-        console.log(str,',',bookName,',',section)
         
         // Replace any abbreviations
         bookName = bookName.replace(/\./g, "")
@@ -378,8 +242,7 @@ export default new Vuex.Store({
         // Check if colons and dashes in section
         var countDash =  (section.match(/-/g)||[]).length;
         var countColon = (section.match(/:/g)||[]).length;
-        console.log(str,',',bookName,',',section)
-        console.log(countColon,',',countDash)
+
         // Initialize vars
         var chapterNum
         var start
@@ -431,13 +294,17 @@ export default new Vuex.Store({
     // {} allow for mutations to return multiple parameters
 
     // async function to fetch the verses from an api url
-    async getVerses(state, {bookName, chapterNum, start, end, sectionName = false}) {
+    async getVerses(state, {bookName, chapterNum, start, end, sectionName}) {
       
+      // Set default values
       if (start===undefined){
         start = 1
       }
       if (end===undefined){
         end = true
+      }   
+      if (sectionName===undefined){
+        sectionName = false
       }   
 
       // make sure proper integer formats
@@ -450,7 +317,6 @@ export default new Vuex.Store({
       // Stores requested book and chapter
       state.bookName = bookName
       state.chapterNum = chapterNum
-      state.totalChapters = state.chapterCounts[bookName]
 
       // If until end of chapter => set end to last verse of chapter
       var lastVerse = state.verseCounts[bookName][chapterNum-1]
@@ -483,7 +349,7 @@ export default new Vuex.Store({
         /*
          * Takes a specific api request to get a certain range of verses. Only 30 verses can be fetched
          * at a time. The await keyword is crucial as it allows each axios request to complete before
-         * oing to the next one. Storing the requests inside an array assures the verses are printed in
+         * moving to the next one. Storing the requests inside an array assures the verses are printed in
          * the proper order
          */
   

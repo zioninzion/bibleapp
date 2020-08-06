@@ -8,10 +8,8 @@
   <b-card no-body 
       style="border-style:none"
       class="mb-1" 
-      v-for="book in books" 
-      :bkey="book.name" 
-      v-bind:key="book.name" 
-      :chapters="book.chapters">
+      v-for="book in $store.state.books" 
+      :key="book.name">
 
     <b-card-header 
       header-tag="header" 
@@ -60,7 +58,6 @@
   
 <script>
 
-import {mapState} from 'vuex'    
   export default{
     name: "BibleBook",
       data() {
@@ -73,15 +70,6 @@ import {mapState} from 'vuex'
 mounted(){
  this.$store.state.isVisible;
 },
-
-
-computed: mapState({
-        books: state=>state.books,
-    }),
-
-   verses() {
-      return this.$store.getters.verseText
-    },
 
 methods:{
   getVerses(bookName, chapterNum){          

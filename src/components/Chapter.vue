@@ -66,7 +66,6 @@
           data() {
     return {
       componentKey: 0,
-      Menu: "Main Menu",
     };
   },
 
@@ -83,10 +82,11 @@ computed:{
 
   // navigate previous or next book or chapter
   navigate(instruction) {
+    var books = this.$store.state.books
     var bookName = this.$store.state.bookName
     var chapterNum = this.$store.state.chapterNum
-    var totalChapters = this.$store.state.totalChapters
-    var index = this.$store.state.bookIndex[bookName]
+    var index = books.findIndex(book => book.name === bookName)
+    var totalChapters = books[index].chapters
 
     if (instruction == 'previousChapter') {
       // If not the first chapter go previous chapter
@@ -116,7 +116,7 @@ computed:{
       // If not Genesis go to previous book
       if (bookName != 'Genesis') {
         index -= 1
-        bookName = this.$store.state.books[index].name
+        bookName = books[index].name
         chapterNum = 1
         this.$store.commit("getVerses", {bookName, chapterNum})
       }
@@ -129,7 +129,7 @@ computed:{
       // If not Revelation go to next book
       if (bookName != 'Revelation') {
         index += 1
-        bookName = this.$store.state.books[index].name
+        bookName = books[index].name
         chapterNum = 1
         this.$store.commit("getVerses", {bookName, chapterNum})
       }
