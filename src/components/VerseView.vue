@@ -69,7 +69,7 @@
 mounted(){
   this.componentKey;
   this.$store.state.isChapter;
-  this.$store.state.isBible;
+  this.$store.state.mainView;
 },
 
 computed:{
@@ -141,7 +141,7 @@ computed:{
 
  reloadPage(){
       this.$store.state.isChapter=false
-      this.$store.state.isBible=true
+      this.$store.state.mainView=true
       this.componentKey +=1
       this.$store.state.buttonVisible=false
 	}

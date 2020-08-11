@@ -9,7 +9,7 @@
       class="btn btn-primary btn-lg buttontab"  
       style="border-color:white; background-color:gray; border-style:groove;" 
       v-on:click="show = true" 
-      v-show="$store.state.isBible">
+      v-show="$store.state.mainView">
     
       Bible
      
@@ -17,22 +17,20 @@
 
     <b-button 
       class="btn btn-secondary btn-lg buttontab" 
-      style="border-color:white; 
-      background-color:gray;
-      border-style:groove;"
-      v-on:click="show = true" 
-      v-show="!$store.state.isBible">
+      style="border-color:white; background-color:gray; border-style:groove;"
+      v-on:click="show = false" 
+      v-show="$store.state.mainView">
       Reading Plan
     </b-button>
  
     <transition name="fade">
 
       <!--Use v-show instead of v-if for faster rendering-->
-      <div v-show="show==true"><BibleBook/><VerseView/></div>
+      <div v-show="show"><BibleBook/><VerseView/></div>
     </transition>
 
     <transition name="fade">
-      <div v-show="show==true"><Plan/><VerseView/></div>
+      <div v-show="!show"><Plan/><VerseView/></div>
     </transition>
     
   </div>
@@ -40,7 +38,7 @@
 
 <script>
 import BibleBook from './components/BibleBook.vue'
-//import Plan from './components/Plan.vue'
+import Plan from './components/Plan.vue'
 import VerseView from './components/VerseView.vue'
 export default {
   name: 'App',
@@ -51,7 +49,7 @@ export default {
   },
   components: {
    BibleBook,
-   //Plan,
+   Plan,
    VerseView,
   },
 }
@@ -76,7 +74,7 @@ export default {
 }
 
 .buttontab{
-  width:100%;
+  width:50%;
 }
 
 </style>

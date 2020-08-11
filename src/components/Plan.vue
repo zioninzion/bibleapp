@@ -5,6 +5,8 @@
     -->    
    <!-- <p v-for="num in $store.state.verseNum" :key="num">{{num +" "+ $store.state.verseArray[num-1]}}</p>
        --> 
+       TEST 
+       TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 
     
   </div>
 </template>

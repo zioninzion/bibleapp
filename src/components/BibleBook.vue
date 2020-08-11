@@ -1,7 +1,7 @@
 <template>
 
 <!--This component will appear while isBible is true-->
-<div role="tablist" v-show="$store.state.isBible" :key="componentKey">
+<div role="tablist" v-show="$store.state.mainView" :key="componentKey">
       
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container.
     Each card will have a button with a unique key id to match its name--> 
@@ -68,7 +68,7 @@
    },
 
 mounted(){
- this.$store.state.isBible;
+ this.$store.state.mainView;
 },
 
 methods:{
