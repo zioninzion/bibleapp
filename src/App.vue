@@ -9,39 +9,39 @@
       class="btn btn-primary btn-lg buttontab"  
       style="border-color:white; background-color:gray; border-style:groove;" 
       v-on:click="show = true" 
-      v-show="$store.state.isVisible">
+      v-show="$store.state.isBible">
     
       Bible
      
     </b-button>
 
-    <!--<b-button 
+    <b-button 
       class="btn btn-secondary btn-lg buttontab" 
       style="border-color:white; 
       background-color:gray;
       border-style:groove;"
-      v-on:click="show = false" 
-      v-show="$store.state.isVisible">
+      v-on:click="show = true" 
+      v-show="!$store.state.isBible">
       Reading Plan
-    </b-button>-->
+    </b-button>
  
     <transition name="fade">
 
       <!--Use v-show instead of v-if for faster rendering-->
-      <div v-show="show==true"><BibleBook/><Chapter/></div>
+      <div v-show="show==true"><BibleBook/><VerseView/></div>
     </transition>
 
-    <!-- <transition name="fade">
-      <div v-show="show==false"><Plan/><Chapter/></div>
-
-  </transition>-->
+    <transition name="fade">
+      <div v-show="show==true"><Plan/><VerseView/></div>
+    </transition>
+    
   </div>
 </template>
 
 <script>
 import BibleBook from './components/BibleBook.vue'
 //import Plan from './components/Plan.vue'
-import Chapter from './components/Chapter.vue'
+import VerseView from './components/VerseView.vue'
 export default {
   name: 'App',
   data:function(){
@@ -52,7 +52,7 @@ export default {
   components: {
    BibleBook,
    //Plan,
-   Chapter,
+   VerseView,
   },
 }
 

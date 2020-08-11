@@ -9,7 +9,7 @@ const axios = require("axios");
 
 export default new Vuex.Store({
   state: {
-    isVisible: true,
+    isBible: true,
     isChapter: false,
     buttonVisible: false,
     bookname: "",
@@ -102,7 +102,7 @@ export default new Vuex.Store({
     
     // async Break verse list sections by book & chapter then getVerses()
     // "Matt. 1; Matthew 2:4; Matt. 5:18-20; Psa. 145-146; Psalm 140:12-141:9"
-    async getVerseList({commit, state}, {verseString}){
+    async getVerseList({commit, state}, verseString){
       
 
       // Split into sectons: [Matt. 1, ..., Psalm 140:12-141:9]
@@ -156,10 +156,11 @@ export default new Vuex.Store({
 
         // John 3-4
         else if (countDash == 1 && countColon == 0) {
-          chapterNum = section.split("-")[0];
-          commit("getVerses", {bookName,chapterNum});
-          chapterNum = section.split("-")[1];
-          commit("getVerses", {bookName,chapterNum});
+          var chapterStart = parseInt(section.split("-")[0])
+          var chapterEnd   = parseInt(section.split("-")[1])
+          for (chapterNum = chapterStart; chapterNum<=chapterEnd; chapterNum++) {
+            commit("getVerses", {bookName,chapterNum}); 
+          }
         }
 
         // Matthew 2:4;
@@ -215,7 +216,7 @@ export default new Vuex.Store({
 
       // When a user presses the button of a chapter number this variable sets to false and hides
       // the Bible book component
-      state.isVisible = false;
+      state.isBible = false;
       state.isChapter = true;
       
       //This variable updates inside an array and contains each requested verse

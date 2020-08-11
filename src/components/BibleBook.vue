@@ -1,7 +1,7 @@
 <template>
 
-<!--This component will appear while isVisible is true-->
-<div role="tablist" v-show="$store.state.isVisible" :key="componentKey">
+<!--This component will appear while isBible is true-->
+<div role="tablist" v-show="$store.state.isBible" :key="componentKey">
       
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container.
     Each card will have a button with a unique key id to match its name--> 
@@ -68,7 +68,7 @@
    },
 
 mounted(){
- this.$store.state.isVisible;
+ this.$store.state.isBible;
 },
 
 methods:{
@@ -78,6 +78,7 @@ methods:{
             });
           this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
                                 // component that's been resetted to closed accordion view
+          
   }
 },
 }

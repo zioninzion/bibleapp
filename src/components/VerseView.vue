@@ -3,17 +3,14 @@
       ensures that all the buttons won't appear before the text does-->
   <div v-show="$store.state.buttonVisible" :key="componentKey">
     <b-button
-      class="chapter_button" 
+      class="return_button" 
       block variant="primary" 
       v-on:click="reloadPage()">
       <i class="fa fa-angle-left" style="float:left"></i>
     </b-button>
     
-    <br>
-    <br>
-    
+    <br>    
     <h3>{{$store.state.currentSection}}</h3>
-    
 
     <!--Added (num, index) to avoid duplicate keys error-->
     <br>   
@@ -26,7 +23,7 @@
     </p>
     
     <br>
-    <div v-if="$store.state.buttonVisible">
+    <div v-if="$store.state.buttonVisible && $store.state.isChapter">
       <transition name ="fade">
       <b-button-toolbar 
           class="center" 
@@ -62,7 +59,7 @@
 
 <script>
   export default {
-    name:"Chapter",
+    name:"VerseView",
           data() {
     return {
       componentKey: 0,
@@ -72,7 +69,7 @@
 mounted(){
   this.componentKey;
   this.$store.state.isChapter;
-  this.$store.state.isVisible;
+  this.$store.state.isBible;
 },
 
 computed:{
@@ -144,7 +141,7 @@ computed:{
 
  reloadPage(){
       this.$store.state.isChapter=false
-      this.$store.state.isVisible=true
+      this.$store.state.isBible=true
       this.componentKey +=1
       this.$store.state.buttonVisible=false
 	}
@@ -170,10 +167,11 @@ computed:{
   margin-bottom:10px;
 }
 
-.chapter_button{
+.return_button{
   background-color:gray;
   color:white;
   border-style:none;
+  height: 48px;
 }
 
 button{
