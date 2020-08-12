@@ -4,7 +4,7 @@
       
     <div 
       v-for="day in days" :key="day.id">
-       <div class="row" @click="getVerses(day.verses)">
+       <div class="row" @click="getVerseList(day.verses)">
           <div class="date">
             <div class="date-header">{{day.date.toLocaleString('default', { month: 'long' })}}</div>
             <span>{{day.date.getDate()}}</span>
@@ -52,9 +52,7 @@ methods:{
     }
     this.days = days;
   },
-  getVerses(verseList){          
-          this.$store.state.readingSections = []
-          this.$store.state.asyncRequests = {}
+  getVerseList(verseList){          
           this.$store.dispatch("getVerseList", verseList);
           this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
                                 // component that's been resetted to closed accordion view

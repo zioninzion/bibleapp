@@ -20,7 +20,8 @@ export default new Vuex.Store({
     title: "",
     // apiRequests and responses
     readingSections: {},
-    asyncRequests: {},
+    loadedSections: [],
+    asyncRequests: [],
     // data for plan and bibleBook components
     plan: plan,
     books: [
@@ -104,8 +105,10 @@ export default new Vuex.Store({
     
     // async Break verse list sections by book & chapter then getVerses()
     // "Matt. 1; Matthew 2:4; Matt. 5:18-20; Psa. 145-146; Psalm 140:12-141:9"
-    async getVerseList({commit, dispatch, state}, verseString){
-      state.asyncRequests = {}
+    async getVerseList({dispatch, state}, verseString){
+      state.asyncRequests = []
+      state.loadedSections = []
+      state.readingSections = {}
 
       // Split into sectons: [Matt. 1, ..., Psalm 140:12-141:9]
       var verseList = verseString.replace(/; /g, ";").split(';');
@@ -187,7 +190,7 @@ export default new Vuex.Store({
         }
         
       }
-      commit('loadVerses')
+      // await Promise.all commit('loadVerses')
 
     },
     
@@ -205,7 +208,8 @@ export default new Vuex.Store({
       if (sectionNumber===undefined){
         sectionNumber = 0
         state.readingSections = {}
-        state.asyncRequests = {}
+        state.asyncRequests = []
+        // submitRequest = true
       }   
 
       // make sure proper integer formats
@@ -240,7 +244,6 @@ export default new Vuex.Store({
          * moving to the next one. Storing the requests inside an array assures the verses are printed in
          * the proper order
          */
-  var asyncRequests = []
   // Make requests in sections or 30 or less verses i.e. 1-29
   var i = 0     // First request
   var next = 0  // Last verse of request
@@ -251,46 +254,26 @@ export default new Vuex.Store({
     if (next > end) {
       next = end
     }
-    asyncRequests[i] = [await axios.get(
+    state.asyncRequests.push([await axios.get(
       "https://api.lsm.org/recver.php?String=" +
         bookName +
         " " +
         chapterNum +
         ":"+start+'-'+next +
-        "&Out=json"), title, sectionNumber]
+        "&Out=json"), title, sectionNumber,i])
     title = ""
     start += 30;
     i +=1
   }
-  state.asyncRequests[sectionNumber] = asyncRequests
-  console.log(sectionNumber)
-    commit('loadVerses')
-      } catch (err) {
-        state.asyncRequests[sectionNumber] = []
-        console.log(err);
-      }
-    },
-    
-
-  },
-
-  //Grab book name and total chapters after user clicks the Bible book button
-  mutations: {
-    // {} allow for mutations to return multiple parameters
-
-    // async function to fetch the verses from an api url
-
-    async loadVerses(state) {
+    // if (submitRequest==true){
       var asyncRequests = state.asyncRequests
       console.log(asyncRequests)
-
-      for (var i = 0; i < Object.keys(asyncRequests).length; i++) {
-        for (var j = 0; j < asyncRequests[i].length; j++) {
-          var request = asyncRequests[i][j];
-          console.log(request)
-
+      console.log(asyncRequests.length)
+      for (i = 0; i < asyncRequests.length; i++) {
+        var request = asyncRequests[i];
+        var requestLabel = `${request[2]},${request[3]}`
+        if (!state.loadedSections.includes(requestLabel)) {
           state.title = request[1]
-          state.sectionNumber = request[2]
           var verses = [];
 
           //The "this" keyword is not bound inside axios.then(function). Assigning this to a variable allows
@@ -301,6 +284,7 @@ export default new Vuex.Store({
               .then(function(response) {
                 state = self.state
                 var data = response[0][0].data
+                var title = state.title
             
             /* Some verses have a backslash character which breaks the json and causes the 
                * response variable to store the verses as a string instead of being transformed 
@@ -327,9 +311,8 @@ export default new Vuex.Store({
             //Skips nonexistent verses
             if (data.verses[k].text.startsWith("No such verse")) {
               if (verses.length != 0) {
-                state.readingSections[state.sectionNumber] = {'title':state.title, 'verses':verses}
+                commit('loadVerses',{requestLabel,title,verses})
               }
-              console.log(verses)
 
               return
             }
@@ -338,18 +321,34 @@ export default new Vuex.Store({
             verses.push(data.verses[k])
           }
           if (verses.length != 0) {
-                state.readingSections[state.sectionNumber] = {'title':state.title, 'verses':verses}
-              console.log(verses)
+                commit('loadVerses',{requestLabel,title,verses})
 
           }
               })
               .catch(function(error) {
                 console.log(error);
               });
-            state.buttonVisible = true;
-            console.log(state.readingSections)
-        }
+            }
       }
+    // }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    
+
+  },
+
+  //Grab book name and total chapters after user clicks the Bible book button
+  mutations: {
+    // {} allow for mutations to return multiple parameters
+
+    // async function to fetch the verses from an api url
+
+    async loadVerses(state,{requestLabel,title,verses}) {
+      state.readingSections[requestLabel] = {'title':title, 'verses':verses}
+      state.buttonVisible = true
+      state.loadedSections.push(requestLabel)
     }
   },
   

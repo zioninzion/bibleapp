@@ -10,7 +10,7 @@
     </b-button>
     
     <br> 
-    <div v-for="readingSection in $store.state.readingSections" :key="readingSection.id">
+    <div v-for="readingSection in readingSections" :key="readingSection.id">
       <span v-if="readingSection.title != ''">
     <h3>{{readingSection.title}}</h3>
     <br>
@@ -60,6 +60,8 @@
 
 
 <script>
+import {mapState} from 'vuex'
+
   export default {
 name:"VerseView",
 data() {
@@ -74,10 +76,31 @@ mounted(){
   this.$store.state.mainView;
 },
 
-computed:{
+computed: mapState(['readingSections']),
+
+created() {
+  this.unsubscribe = this.$store.subscribe((mutation, state) => {
+    if (mutation.type === 'loadVerses') {
+      console.log(state.readingSections)
+          this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
+
+      // console.log(`Updating to ${state.status}`);
+
+      // Do whatever makes sense now
+      // if (state.status === 'success') {
+      //   this.complex = {
+      //     deep: 'some deep object',
+      //   };
+      // }
+    }
+  });
 },
-  
- methods:{
+
+beforeDestroy() {
+  this.unsubscribe();
+},
+
+methods:{
 
   // navigate previous or next book or chapter
   navigate(instruction) {
@@ -138,10 +161,11 @@ computed:{
     }
     this.componentKey+=1
     this.$store.state.buttonVisible=false
-
+    this.$store.state.loadedSections= []
   },
 
  reloadPage(){
+      this.$store.state.loadedSections= []
       this.$store.state.isChapter=false
       this.$store.state.mainView=true
       this.componentKey +=1

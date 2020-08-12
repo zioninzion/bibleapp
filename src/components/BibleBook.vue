@@ -73,7 +73,7 @@ mounted(){
 
 methods:{
   getVerses(bookName, chapterNum){       
-          this.$store.dispatch("getVerses", {
+          this.$store.commit("getVerses", {
             bookName, chapterNum // Allows for multiple parameters
             });
           this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
