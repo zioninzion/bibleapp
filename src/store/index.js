@@ -2,6 +2,7 @@
 
 import Vue from "vue";
 import Vuex from "vuex";
+import plan from '@/store/plan.json';
 
 Vue.use(Vuex);
 
@@ -9,18 +10,19 @@ const axios = require("axios");
 
 export default new Vuex.Store({
   state: {
-    isChapter: false,
+    // Visibilty states
     mainView: true,
+    isChapter: false,
     buttonVisible: false,
-    bookname: "",
-    verseText: "",
-    verseNum: 0,
-    totalChapters: 0,
+    // current book & chapter
+    bookName: "",
     chapterNum: 0,
-    verseArray: [],
-    asyncRequests: [],
-    bookchapter: {},
-    bookIndex: 0,
+    title: "",
+    // apiRequests and responses
+    readingSections: {},
+    asyncRequests: {},
+    // data for plan and bibleBook components
+    plan: plan,
     books: [
       { name: "Genesis", chapters: 50, abbrev: "Gen"},
       { name: "Exodus", chapters: 40, abbrev: "Exo"},
@@ -93,8 +95,8 @@ export default new Vuex.Store({
 
   //Stores the verse requested from the Api into the verseText variable
   getters: {
-    verseText: (state) => {
-      return state.verseText;
+    readingSections: (state) => {
+      return state.readingSections;
     },
   },
 
@@ -102,12 +104,13 @@ export default new Vuex.Store({
     
     // async Break verse list sections by book & chapter then getVerses()
     // "Matt. 1; Matthew 2:4; Matt. 5:18-20; Psa. 145-146; Psalm 140:12-141:9"
-    async getVerseList({commit, state}, verseString){
-      
+    async getVerseList({commit, dispatch, state}, verseString){
+      state.asyncRequests = {}
 
       // Split into sectons: [Matt. 1, ..., Psalm 140:12-141:9]
       var verseList = verseString.replace(/; /g, ";").split(';');
-
+      var sectionNumber = 0
+      var sectionTitle = true
       // Loop through verseList
       for (var i = 0; i < verseList.length; i++) {
 
@@ -141,17 +144,20 @@ export default new Vuex.Store({
         if (countDash == 1 && countColon == 2) {
           // Split into chapter and verse
           [chapterNum, start] = section.split("-")[0].split(':');
-          commit("getVerses", {bookName,chapterNum,start});
+          dispatch("getVerses", {bookName,chapterNum,start,sectionNumber,sectionTitle});
+          sectionNumber += 1;
           [chapterNum, end] = section.split("-")[1].split(':');
           start = 1
-          commit("getVerses", {bookName,chapterNum,start,end});
+          dispatch("getVerses", {bookName,chapterNum,start,end,sectionNumber,sectionTitle});
+          sectionNumber += 1
         }
 
         // Matt. 5:18-20
         else if (countDash == 1 && countColon == 1) {
           [chapterNum, start] = section.split("-")[0].split(':');
           end = section.split("-")[1];
-          commit("getVerses", {bookName,chapterNum,start,end});
+          dispatch("getVerses", {bookName,chapterNum,start,end,sectionNumber,sectionTitle});
+          sectionNumber -= 1;
         }
 
         // John 3-4
@@ -159,7 +165,8 @@ export default new Vuex.Store({
           var chapterStart = parseInt(section.split("-")[0])
           var chapterEnd   = parseInt(section.split("-")[1])
           for (chapterNum = chapterStart; chapterNum<=chapterEnd; chapterNum++) {
-            commit("getVerses", {bookName,chapterNum}); 
+            dispatch("getVerses", {bookName,chapterNum,sectionNumber}); 
+            sectionNumber += 1;
           }
         }
 
@@ -167,34 +174,38 @@ export default new Vuex.Store({
         else if (countDash == 0 && countColon == 1) {
           [chapterNum, start] = section.split(":");
           end = start
-          commit("getVerses", {bookName,chapterNum,start,end});
+          dispatch("getVerses", {bookName,chapterNum,start,end,sectionNumber,sectionTitle});
+          sectionNumber += 1;
+
         }
         
         // Matt. 1
         else if (countDash == 0 && countColon == 0) {
           chapterNum = section;
-          commit("getVerses", {bookName,chapterNum});
+          dispatch("getVerses", {bookName,chapterNum,sectionNumber});
+          sectionNumber += 1;
         }
+        
       }
+      commit('loadVerses')
+
     },
-  },
-
-  //Grab book name and total chapters after user clicks the Bible book button
-  mutations: {
-    // {} allow for mutations to return multiple parameters
-
-    // async function to fetch the verses from an api url
-    async getVerses(state, {bookName, chapterNum, start, end, sectionName}) {
+    
+    async getVerses({commit, state}, {bookName, chapterNum, start, end, sectionNumber, sectionTitle}) {
       
       // Set default values
+      var title = ""
       if (start===undefined){
         start = 1
       }
       if (end===undefined){
         end = 176           // last possible verse Psa. 119:176
-      }   
-      if (sectionName===undefined){
-        sectionName = false
+      }
+      // var submitRequest = false
+      if (sectionNumber===undefined){
+        sectionNumber = 0
+        state.readingSections = {}
+        state.asyncRequests = {}
       }   
 
       // make sure proper integer formats
@@ -207,24 +218,19 @@ export default new Vuex.Store({
       state.chapterNum = chapterNum
 
       // If section title requested (true: Genesis 1:1-26) else print Genesis 1
-      if (sectionName == false){
-        state.currentSection = bookName + " "+chapterNum
+      if (sectionTitle == undefined){
+        title = bookName + " "+chapterNum
       }
       else {
-        state.currentSection = bookName + " "+chapterNum+":"+start+"-"+end
+        title = bookName + " "+chapterNum+":"+start+"-"+end
       }
+
+      console.log(bookName, chapterNum, start, end, sectionNumber, sectionTitle)
 
       // When a user presses the button of a chapter number this variable sets to false and hides
       // the Bible book component
       state.mainView = false;
       state.isChapter = true;
-      
-      //This variable updates inside an array and contains each requested verse
-      state.verseNum = 0;
-
-      //The "this" keyword is not bound inside axios.then(function). Assigning this to a variable allows
-      //us to refer to the "data" property
-      var Text = this;
      
       //Try catch block to log and capture errors
       try {
@@ -234,7 +240,7 @@ export default new Vuex.Store({
          * moving to the next one. Storing the requests inside an array assures the verses are printed in
          * the proper order
          */
-  
+  var asyncRequests = []
   // Make requests in sections or 30 or less verses i.e. 1-29
   var i = 0     // First request
   var next = 0  // Last verse of request
@@ -245,103 +251,107 @@ export default new Vuex.Store({
     if (next > end) {
       next = end
     }
-    state.asyncRequests[i] = await axios.get(
+    asyncRequests[i] = [await axios.get(
       "https://api.lsm.org/recver.php?String=" +
         bookName +
         " " +
         chapterNum +
         ":"+start+'-'+next +
-        "&Out=json"
-    );
+        "&Out=json"), title, sectionNumber]
+    title = ""
     start += 30;
     i +=1
   }
+  state.asyncRequests[sectionNumber] = asyncRequests
+  console.log(sectionNumber)
+    commit('loadVerses')
       } catch (err) {
+        state.asyncRequests[sectionNumber] = []
         console.log(err);
       }
-      
-      // Promise.all takes the requests we just made and executes them in a certain order with the
-      // .then function method. The responses variable is an array that holds the data
-      for (var index = 0; index < state.asyncRequests.length; index++) {
-      await Promise.all([
-        state.asyncRequests[index],
-      ])
-
-        .then(function(response) {
-              // Cycle through each verse individually which are held in separate json arrays.
-          for (var i = 0; i < response.length; i++) {
-            for (var j = 0; j < 30; j++) {
-      
-		/* Some verses have a backslash character which breaks the json and causes the 
-		     * response variable to store the verses as a string instead of being transformed 
-		     * into an array object. We want to check and see if the response variable is a string. 
-		     * If it is then we remove any backslash characters and reparse the formatted json 
-		     * string into an array. Otherwise we just skip both the reformating and the parsing and just 
-		     * store the response array into a variable.  
-		*/
-      // The response format is a "\[ *verse* \]" string returned for "Rom. 16:24", "Mark 9:44", and "Mark 9:46" for json parsing
-
-		if(typeof response[i].data == "string") {
-      // The replace function will look for all backslashes and replace them with nothing
-      var removeSlash = response[i].data.replace(/\\/g, "").replace(/\//g, "")
-			
-			// The JSON.parse function will turn the json string variable into an array
-			var parsed = JSON.parse(removeSlash)
-			for(var k = 0; k < parsed.verses.length; k++){	
-
-        // The replace function will look for all brakets [] and replace them with nothing excluding the three verses
-        if (parsed.verses[k].ref !="Rom. 16:24" && parsed.verses[k].ref !="Mark 9:44" && parsed.verses[k].ref !="Mark 9:46") {
-          parsed.verses[k].text = parsed.verses[k].text.replace(/\[/g, "").replace(/\]/g, "")
-        }
-
-        //Skips nonexistent verses
-        if (parsed.verses[k].text.startsWith("No such verse")) {
-          return
-        }
-
-				// Verses are stored into another array
-        state.verseArray[state.verseNum] = parsed.verses[k].text;
-
-        // If reached end of verses return
-        if (state.verseNum == end) {
-          return
-        }
-        state.verseNum += 1;
-			}
-		}
-		
-		else{
-      var verseText = response[i].data.verses[j].text
-      // The replace function will look for all brakets [] and replace them with nothing
-      if (verseText.includes('[')) {
-        verseText = verseText.replace(/\[/g, "").replace(/\]/g, "");
-      } 
-      Text.state.verseText = verseText;
-
-      //Skips nonexistent verses
-      if (Text.state.verseText.startsWith("No such verse")) {
-        return
-      }
-              
-			//The verse strings are stored in an array
-      state.verseArray[state.verseNum] = Text.state.verseText;
-
-      // If reached end of verses return
-      if (state.verseNum == end) {
-        return
-      }
-			state.verseNum = +state.verseNum + 1;
-		}
-	}
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      state.buttonVisible = true;
-      }
     },
+    
 
   },
+
+  //Grab book name and total chapters after user clicks the Bible book button
+  mutations: {
+    // {} allow for mutations to return multiple parameters
+
+    // async function to fetch the verses from an api url
+
+    async loadVerses(state) {
+      var asyncRequests = state.asyncRequests
+      console.log(asyncRequests)
+
+      for (var i = 0; i < Object.keys(asyncRequests).length; i++) {
+        for (var j = 0; j < asyncRequests[i].length; j++) {
+          var request = asyncRequests[i][j];
+          console.log(request)
+
+          state.title = request[1]
+          state.sectionNumber = request[2]
+          var verses = [];
+
+          //The "this" keyword is not bound inside axios.then(function). Assigning this to a variable allows
+          //us to refer to the "data" property
+          var self = this;
+     
+            await Promise.all([request])
+              .then(function(response) {
+                state = self.state
+                var data = response[0][0].data
+            
+            /* Some verses have a backslash character which breaks the json and causes the 
+               * response variable to store the verses as a string instead of being transformed 
+               * into an array object. We want to check and see if the response variable is a string. 
+               * If it is then we remove any backslash characters and reparse the formatted json 
+               * string into an array. Otherwise we just skip both the reformating and the parsing and just 
+               * store the response array into a variable.  
+            */
+            // The response format is a "\[ *verse* \]" string returned for "Rom. 16:24", "Mark 9:44", and "Mark 9:46" for json parsing
+          if(typeof data == "string") {
+            // The replace function will look for all backslashes and replace them with nothing
+            var removeSlash = data.replace(/\\/g, "").replace(/\//g, "")
+            
+            // The JSON.parse function will turn the json string variable into an array
+            data = JSON.parse(removeSlash)
+          }
+          for(var k = 0; k < data.verses.length; k++){	
+    
+            // The replace function will look for all brakets [] and replace them with nothing excluding the three verses
+            if (data.verses[k].ref !="Rom. 16:24" && data.verses[k].ref !="Mark 9:44" && data.verses[k].ref !="Mark 9:46") {
+              data.verses[k].text = data.verses[k].text.replace(/\[/g, "").replace(/\]/g, "")
+            }
+    
+            //Skips nonexistent verses
+            if (data.verses[k].text.startsWith("No such verse")) {
+              if (verses.length != 0) {
+                state.readingSections[state.sectionNumber] = {'title':state.title, 'verses':verses}
+              }
+              console.log(verses)
+
+              return
+            }
+    
+            // Verses are stored into another array
+            verses.push(data.verses[k])
+          }
+          if (verses.length != 0) {
+                state.readingSections[state.sectionNumber] = {'title':state.title, 'verses':verses}
+              console.log(verses)
+
+          }
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+            state.buttonVisible = true;
+            console.log(state.readingSections)
+        }
+      }
+    }
+  },
+  
 
 });

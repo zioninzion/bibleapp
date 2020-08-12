@@ -9,19 +9,21 @@
       <i class="fa fa-angle-left" style="float:left"></i>
     </b-button>
     
-    <br>    
-    <h3>{{$store.state.currentSection}}</h3>
-
-    <!--Added (num, index) to avoid duplicate keys error-->
-    <br>   
+    <br> 
+    <div v-for="readingSection in $store.state.readingSections" :key="readingSection.id">
+      <span v-if="readingSection.title != ''">
+    <h3>{{readingSection.title}}</h3>
+    <br>
+    </span>
     <p 
       style="" 
-      v-for="(num, i) in $store.state.verseNum" 
-      :key="'num'+i">
-      <sup>{{num}}</sup>
-      {{" "+ $store.state.verseArray[num-1]}}
+      v-for="(verse, i) in readingSection.verses" 
+      :key="i+verse.ref">
+      <sup>{{verse.ref.split(':')[1]}}</sup>
+      {{" "+ verse.text}}
     </p>
-    
+    </div>
+
     <br>
     <div v-if="$store.state.buttonVisible && $store.state.isChapter">
       <transition name ="fade">
@@ -59,12 +61,12 @@
 
 <script>
   export default {
-    name:"VerseView",
-          data() {
-    return {
-      componentKey: 0,
-    };
-  },
+name:"VerseView",
+data() {
+  return {
+    componentKey: 0,
+  };
+},
 
 mounted(){
   this.componentKey;
@@ -89,7 +91,7 @@ computed:{
       // If not the first chapter go previous chapter
       if (chapterNum != 1) {
         chapterNum -= 1
-        this.$store.commit("getVerses", {bookName, chapterNum})
+        this.$store.dispatch("getVerses", {bookName, chapterNum})
       }
       else {
         this.navigate('previousBook')
@@ -101,7 +103,7 @@ computed:{
       // If not the last chapter go next chapter
       if (chapterNum != totalChapters) {
         chapterNum += 1
-        this.$store.commit("getVerses", {bookName, chapterNum})
+        this.$store.dispatch("getVerses", {bookName, chapterNum})
       }
       else {
         this.navigate('nextBook')
@@ -115,7 +117,7 @@ computed:{
         index -= 1
         bookName = books[index].name
         chapterNum = 1
-        this.$store.commit("getVerses", {bookName, chapterNum})
+        this.$store.dispatch("getVerses", {bookName, chapterNum})
       }
       else {
         return
@@ -128,7 +130,7 @@ computed:{
         index += 1
         bookName = books[index].name
         chapterNum = 1
-        this.$store.commit("getVerses", {bookName, chapterNum})
+        this.$store.dispatch("getVerses", {bookName, chapterNum})
       }
       else {
         return

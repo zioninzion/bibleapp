@@ -23,15 +23,15 @@
       Reading Plan
     </b-button>
  
-    <transition name="fade">
+    <!-- <transition name="fade"> -->
 
       <!--Use v-show instead of v-if for faster rendering-->
       <div v-show="show"><BibleBook/><VerseView/></div>
-    </transition>
+    <!-- </transition> -->
 
-    <transition name="fade">
+    <!-- <transition name="fade"> -->
       <div v-show="!show"><Plan/><VerseView/></div>
-    </transition>
+    <!-- </transition> -->
     
   </div>
 </template>

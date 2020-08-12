@@ -59,27 +59,28 @@
 <script>
 
   export default{
-    name: "BibleBook",
-      data() {
-     return {
-       componentKey: 0,
-       rotate: true,
-     };
-   },
+name: "BibleBook",
+data() {
+  return {
+    componentKey: 0,
+    rotate: true,
+  };
+},
 
 mounted(){
  this.$store.state.mainView;
 },
 
 methods:{
-  getVerses(bookName, chapterNum){          
-          this.$store.commit("getVerses", {
+  getVerses(bookName, chapterNum){       
+          this.$store.dispatch("getVerses", {
             bookName, chapterNum // Allows for multiple parameters
             });
           this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
                                 // component that's been resetted to closed accordion view
           
   }
+
 },
 }
   
