@@ -170,17 +170,26 @@ export default new Vuex.Store({
   },
 
   async getVerses({commit}, payload) {
-    // Set default values   // last possible verse Psa. 119:176
-    var {bookName, chapterNum, start=1, end=176, sectionTitle=false, resetVerses=false} = payload
-
+    // Set default values
+    var {bookName, chapterNum, start=1, end, sectionTitle=false, resetVerses=false} = payload
     if (resetVerses) {
       commit('RESET_Verses')
     }
-
+    
     // make sure proper integer formats
     chapterNum = parseInt(chapterNum)
     start = parseInt(start)
-    end = parseInt(end)
+
+    // last possible verse Psa. 119:176  // Second longest book Numbers 7:89
+    if (end === undefined) {
+      if (bookName == 'Psalms' && chapterNum == '119'){
+        end = 176
+      } else {
+        end = 89
+      }
+    } else {
+      end = parseInt(end)
+    }
 
     // If section title requested (true: Genesis 1:1-26) else print Genesis 1
     if (sectionTitle == false){

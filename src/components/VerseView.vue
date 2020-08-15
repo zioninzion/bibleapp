@@ -13,7 +13,6 @@
     <div v-for="section in sections" :key="section.id">
       <span v-if="section.title != ''">
     <h3>{{section.title}}</h3>
-    <br>
     </span>
     <p 
       style="" 
