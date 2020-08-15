@@ -73,7 +73,6 @@ import {mapState} from 'vuex'
 
   methods:{
     // navigate previous or next book or chapter
-    // Instructions: previousChapter, previousBook, nextBook, nextChapter
     async navigate(instruction) {
       var books = this.$store.state.books
       var bookName = this.$store.state.bookName
@@ -82,56 +81,53 @@ import {mapState} from 'vuex'
       var totalChapters = books[index].chapters
       var resetVerses = true
 
+      // Set Book & Chapter depending on instruction
+      // Instructions: previousChapter, previousBook, nextBook, nextChapter
+      // 
       if (instruction == 'previousChapter') {
         // If not the first chapter go previous chapter
         if (chapterNum != 1) {
           chapterNum -= 1
-          await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
         }
         else {
           this.navigate('previousBook')
           return
         }
       }
-
       if (instruction == 'nextChapter') {
         // If not the last chapter go next chapter
         if (chapterNum != totalChapters) {
           chapterNum += 1
-          await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
         }
         else {
           this.navigate('nextBook')
           return
         }
       }
-
       if (instruction == 'previousBook') {
         // If not Genesis go to previous book
         if (bookName != 'Genesis') {
           index -= 1
           bookName = books[index].name
           chapterNum = 1
-          await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
         }
         else {
           return
         }
       }
-          
       if (instruction == 'nextBook') {
         // If not Revelation go to next book
         if (bookName != 'Revelation') {
           index += 1
           bookName = books[index].name
           chapterNum = 1
-          await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
         }
         else {
           return
         }
       }
       this.$store.commit('CHAPTER_SELECTED', {bookName, chapterNum})
+      await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
       this.$store.commit('FINISHED_LOADING_SECTION')
     },
 

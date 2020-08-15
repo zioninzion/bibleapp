@@ -260,7 +260,6 @@ export default new Vuex.Store({
       state.isChapter=false
       state.mainView=true
       state.buttonVisible=false
-      state.buttonVisible = false
       state.sections = []
     },
 
