@@ -47,41 +47,34 @@
             {{chapterNum}}
         </b-button>
       </b-row>
-    
     </b-collapse>
-  
   </b-card>
-
 </div>
-
 </template>
   
 <script>
-
   export default{
-name: "BibleBook",
-data() {
-  return {
-    componentKey: 0,
-    rotate: true,
-  };
-},
+  name: "BibleBook",
+  data() {
+    return {
+      componentKey: 0,
+      rotate: true,
+    };
+  },
 
-mounted(){
- this.$store.state.mainView;
-},
+  mounted(){
+    this.$store.state.mainView;
+  },
 
-methods:{
-  getVerses(bookName, chapterNum){       
-          this.$store.dispatch("getVerses", {
-            bookName, chapterNum // Allows for multiple parameters
-            });
-          this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
-                                // component that's been resetted to closed accordion view
-          
-  }
-
-},
+  methods:{
+    async getVerses(bookName, chapterNum){
+      this.$store.commit('CHAPTER_SELECTED', {bookName, chapterNum})
+      await this.$store.dispatch("getVerses", {bookName, chapterNum})
+      this.$store.commit('FINISHED_LOADING_SECTION')
+      this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
+                            // component that's been resetted to closed accordion view
+    }
+  },
 }
   
 </script>
@@ -96,41 +89,41 @@ methods:{
    opacity: 0;
  }
 
-.bible_button{
-  text-align:left;
-  background-color:white;
-  color:#696969;
-  border-style:none;
-}
+  .bible_button{
+    text-align:left;
+    background-color:white;
+    color:#696969;
+    border-style:none;
+  }
 
-.caret_right{
-  float:right;
-}
+  .caret_right{
+    float:right;
+  }
 
-.chapter_card{
-  background-color:white;
-  color:#696969; 
-  border-style: none;
-  height: 40px;
-  box-shadow: 5px 10px #DCDCDC; 
-  margin-top:5px;
-  margin-left:5px;
-  margin-bottom:5px;
-  margin-right:5px;
-}
+  .chapter_card{
+    background-color:white;
+    color:#696969; 
+    border-style: none;
+    height: 40px;
+    box-shadow: 5px 10px #DCDCDC; 
+    margin-top:5px;
+    margin-left:5px;
+    margin-bottom:5px;
+    margin-right:5px;
+  }
 
 
-.rotate{
-    -moz-transition: all 2s linear;
-    -webkit-transition: all 2s linear;
-    transition: all 2s linear;
-}
+  .rotate{
+      -moz-transition: all 2s linear;
+      -webkit-transition: all 2s linear;
+      transition: all 2s linear;
+  }
 
-.rotate.down{
-    -ms-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
-}
+  .rotate.down{
+      -ms-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+  }
 
 </style>

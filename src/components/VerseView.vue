@@ -1,7 +1,7 @@
 <template>
   <!--buttonVisible variable becomes true after Bible text is rendered. This
       ensures that all the buttons won't appear before the text does-->
-  <div v-show="$store.state.buttonVisible" :key="componentKey">
+  <div v-show="$store.state.buttonVisible">
     <b-button
       class="return_button" 
       block variant="primary" 
@@ -10,14 +10,14 @@
     </b-button>
     
     <br> 
-    <div v-for="readingSection in readingSections" :key="readingSection.id">
-      <span v-if="readingSection.title != ''">
-    <h3>{{readingSection.title}}</h3>
+    <div v-for="section in sections" :key="section.id">
+      <span v-if="section.title != ''">
+    <h3>{{section.title}}</h3>
     <br>
     </span>
     <p 
       style="" 
-      v-for="(verse, i) in readingSection.verses" 
+      v-for="(verse, i) in section.verses" 
       :key="i+verse.ref">
       <sup>{{verse.ref.split(':')[1]}}</sup>
       {{" "+ verse.text}}
@@ -63,115 +63,82 @@
 import {mapState} from 'vuex'
 
   export default {
-name:"VerseView",
-data() {
-  return {
-    componentKey: 0,
-  };
-},
+  name:"VerseView",
 
-mounted(){
-  this.componentKey;
-  this.$store.state.isChapter;
-  this.$store.state.mainView;
-},
+  computed: {
+    ...mapState([
+      'sections'
+      ])
+    },
 
-computed: mapState(['readingSections']),
+  methods:{
+    // navigate previous or next book or chapter
+    // Instructions: previousChapter, previousBook, nextBook, nextChapter
+    async navigate(instruction) {
+      var books = this.$store.state.books
+      var bookName = this.$store.state.bookName
+      var chapterNum = this.$store.state.chapterNum
+      var index = books.findIndex(book => book.name === bookName)
+      var totalChapters = books[index].chapters
+      var resetVerses = true
 
-created() {
-  this.unsubscribe = this.$store.subscribe((mutation, state) => {
-    if (mutation.type === 'loadVerses') {
-      console.log(state.readingSections)
-          this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
+      if (instruction == 'previousChapter') {
+        // If not the first chapter go previous chapter
+        if (chapterNum != 1) {
+          chapterNum -= 1
+          await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
+        }
+        else {
+          this.navigate('previousBook')
+          return
+        }
+      }
 
-      // console.log(`Updating to ${state.status}`);
+      if (instruction == 'nextChapter') {
+        // If not the last chapter go next chapter
+        if (chapterNum != totalChapters) {
+          chapterNum += 1
+          await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
+        }
+        else {
+          this.navigate('nextBook')
+          return
+        }
+      }
 
-      // Do whatever makes sense now
-      // if (state.status === 'success') {
-      //   this.complex = {
-      //     deep: 'some deep object',
-      //   };
-      // }
+      if (instruction == 'previousBook') {
+        // If not Genesis go to previous book
+        if (bookName != 'Genesis') {
+          index -= 1
+          bookName = books[index].name
+          chapterNum = 1
+          await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
+        }
+        else {
+          return
+        }
+      }
+          
+      if (instruction == 'nextBook') {
+        // If not Revelation go to next book
+        if (bookName != 'Revelation') {
+          index += 1
+          bookName = books[index].name
+          chapterNum = 1
+          await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
+        }
+        else {
+          return
+        }
+      }
+      this.$store.commit('CHAPTER_SELECTED', {bookName, chapterNum})
+      this.$store.commit('FINISHED_LOADING_SECTION')
+    },
+
+  reloadPage(){
+    this.$store.commit('RELOAD_PAGE')
     }
-  });
-},
-
-beforeDestroy() {
-  this.unsubscribe();
-},
-
-methods:{
-
-  // navigate previous or next book or chapter
-  navigate(instruction) {
-    var books = this.$store.state.books
-    var bookName = this.$store.state.bookName
-    var chapterNum = this.$store.state.chapterNum
-    var index = books.findIndex(book => book.name === bookName)
-    var totalChapters = books[index].chapters
-
-    if (instruction == 'previousChapter') {
-      // If not the first chapter go previous chapter
-      if (chapterNum != 1) {
-        chapterNum -= 1
-        this.$store.dispatch("getVerses", {bookName, chapterNum})
-      }
-      else {
-        this.navigate('previousBook')
-        return
-      }
-    }
-
-    if (instruction == 'nextChapter') {
-      // If not the last chapter go next chapter
-      if (chapterNum != totalChapters) {
-        chapterNum += 1
-        this.$store.dispatch("getVerses", {bookName, chapterNum})
-      }
-      else {
-        this.navigate('nextBook')
-        return
-      }
-    }
-
-    if (instruction == 'previousBook') {
-      // If not Genesis go to previous book
-      if (bookName != 'Genesis') {
-        index -= 1
-        bookName = books[index].name
-        chapterNum = 1
-        this.$store.dispatch("getVerses", {bookName, chapterNum})
-      }
-      else {
-        return
-      }
-    }
-        
-    if (instruction == 'nextBook') {
-      // If not Revelation go to next book
-      if (bookName != 'Revelation') {
-        index += 1
-        bookName = books[index].name
-        chapterNum = 1
-        this.$store.dispatch("getVerses", {bookName, chapterNum})
-      }
-      else {
-        return
-      }
-    }
-    this.componentKey+=1
-    this.$store.state.buttonVisible=false
-    this.$store.state.loadedSections= []
-  },
-
- reloadPage(){
-      this.$store.state.loadedSections= []
-      this.$store.state.isChapter=false
-      this.$store.state.mainView=true
-      this.componentKey +=1
-      this.$store.state.buttonVisible=false
-	}
-}
+  }
 } 
 
 

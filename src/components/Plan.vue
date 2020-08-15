@@ -23,44 +23,41 @@
 
 
 <script>
-  export default {
-name:"Plan",
-data() {
-  return {
-    days: 0,
-  };
-},
-mounted() { 
-  this.loadPlans();
-  this.$store.state.plan;
-
-},
-
-methods:{
-  loadPlans()  {
-    var key = Object.keys(this.$store.state.plan)[0]
-    var verseList = this.$store.state.plan[key];
-    
-    var days = []
-
-    var startDate = new Date(key);
-    var nextDate = startDate;
-    for (var i = 0; i < verseList.length; i++) {
-      var date = new Date(nextDate);
-      days.push({'date':date, 'verses':verseList[i]});
-      nextDate.setDate(nextDate.getDate() + 1);
-    }
-    this.days = days;
+export default {
+  name:"Plan",
+  data() {
+    return {
+      days: 0,
+    };
   },
-  getVerseList(verseList){          
-          this.$store.dispatch("getVerseList", verseList);
-          this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
-                                // component that's been resetted to closed accordion view
-          
-  }
-},
+  
+  mounted() { 
+    this.loadPlans();
+  },
 
-  } 
+  methods:{
+    loadPlans()  {
+      var key = Object.keys(this.$store.state.plan)[0]
+      var verseList = this.$store.state.plan[key];
+      
+      var days = []
+
+      var startDate = new Date(key);
+      var nextDate = startDate;
+      for (var i = 0; i < verseList.length; i++) {
+        var date = new Date(nextDate);
+        days.push({'date':date, 'verses':verseList[i]});
+        nextDate.setDate(nextDate.getDate() + 1);
+      }
+      this.days = days;
+    },
+
+    getVerseList(verseList){          
+      this.$store.commit("PLAN_SELECTED")
+      this.$store.dispatch("getVerseList", verseList);
+    }
+  },
+}
 
 
 </script>
