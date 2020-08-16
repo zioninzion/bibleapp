@@ -93,7 +93,7 @@ export default new Vuex.Store({
   actions: {
   // async Break verse list sections by book & chapter then getVerses()
   // "Matt. 1; Matthew 2:4; Matt. 5:18-20; Psa. 145-146; Psalm 140:12-141:9"
-  async getVerseList({dispatch, commit, state}, verseString){
+  async getVerseList({dispatch, state}, verseString){
 
     // Split into sectons: [Matt. 1, ..., Psalm 140:12-141:9]
     var verseList = verseString.replace(/; /g, ";").split(';');
@@ -165,7 +165,6 @@ export default new Vuex.Store({
         chapterNum = section;
         await dispatch("getVerses", {bookName,chapterNum});
       }
-      commit('FINISHED_LOADING_SECTION')
     }
   },
 
@@ -260,7 +259,7 @@ export default new Vuex.Store({
     } catch (error) {
       console.log(error)
     }
-
+    commit('FINISHED_LOADING_SECTION')
   },
   },
 

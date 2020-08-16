@@ -70,7 +70,6 @@
     async getVerses(bookName, chapterNum){
       this.$store.commit('CHAPTER_SELECTED', {bookName, chapterNum})
       await this.$store.dispatch("getVerses", {bookName, chapterNum})
-      this.$store.commit('FINISHED_LOADING_SECTION')
       this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
                             // component that's been resetted to closed accordion view
     }

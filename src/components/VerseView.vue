@@ -127,7 +127,6 @@ import {mapState} from 'vuex'
       }
       this.$store.commit('CHAPTER_SELECTED', {bookName, chapterNum})
       await this.$store.dispatch("getVerses", {bookName, chapterNum, resetVerses})
-      this.$store.commit('FINISHED_LOADING_SECTION')
     },
 
   reloadPage(){
