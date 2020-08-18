@@ -7,6 +7,7 @@
       block variant="primary" 
       v-on:click="reloadPage()">
       <i class="fa fa-angle-left" style="float:left"></i>
+    Main Page
     </b-button>
     
     <br> 
@@ -82,9 +83,11 @@ import {mapState} from 'vuex'
 
       // Set Book & Chapter depending on instruction
       // Instructions: previousChapter, previousBook, nextBook, nextChapter
-      // 
-      if (instruction == 'previousChapter') {
-        // If not the first chapter go previous chapter
+      
+      // Switch statements behave just like an if /else statement 
+      switch (instruction) {
+        case 'previousChapter':
+	// If not the first chapter go previous chapter
         if (chapterNum != 1) {
           chapterNum -= 1
         }
@@ -92,8 +95,8 @@ import {mapState} from 'vuex'
           this.navigate('previousBook')
           return
         }
-      }
-      if (instruction == 'nextChapter') {
+	break; 
+      case 'nextChapter':
         // If not the last chapter go next chapter
         if (chapterNum != totalChapters) {
           chapterNum += 1
@@ -102,8 +105,8 @@ import {mapState} from 'vuex'
           this.navigate('nextBook')
           return
         }
-      }
-      if (instruction == 'previousBook') {
+      break;
+      case 'previousBook':
         // If not Genesis go to previous book
         if (bookName != 'Genesis') {
           index -= 1
@@ -113,8 +116,8 @@ import {mapState} from 'vuex'
         else {
           return
         }
-      }
-      if (instruction == 'nextBook') {
+      break;
+      case 'nextBook': 
         // If not Revelation go to next book
         if (bookName != 'Revelation') {
           index += 1
@@ -162,7 +165,8 @@ import {mapState} from 'vuex'
 }
 
 button{
-  background-color:gray;
+   background-color: rgb(48, 65, 72, 1.0) !important;
+
 }
 
 h3, p{

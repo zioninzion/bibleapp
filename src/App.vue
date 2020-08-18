@@ -5,23 +5,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!--isVisible variable ensures that either the BibleBook or the Plan components will be visible at a time-->
-    <b-button 
-      class="btn btn-primary btn-lg buttontab"  
-      style="border-color:white; background-color:gray; border-style:groove;" 
+    <button
+      class="buttontab"  
       v-on:click="show = true" 
       v-show="$store.state.mainView">
     
       Bible
      
-    </b-button>
+    </button>
 
-    <b-button 
-      class="btn btn-secondary btn-lg buttontab" 
-      style="border-color:white; background-color:gray; border-style:groove;"
+    <button 
+      class="buttontab" 
       v-on:click="show = false" 
       v-show="$store.state.mainView">
       Reading Plan
-    </b-button>
+    </button>
  
     <!-- <transition name="fade"> -->
 
@@ -75,6 +73,12 @@ export default {
 
 .buttontab{
   width:50%;
+  color: white;
+  height: 50px;
+  background-color: rgb(48, 65, 72, 1.0) !important;
+  border-style:solid !important;
+  border-width: thin !important;
+  outline: none;
 }
 
 </style>

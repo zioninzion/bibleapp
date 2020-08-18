@@ -6,7 +6,7 @@
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container.
     Each card will have a button with a unique key id to match its name--> 
   <b-card no-body 
-      style="border-style:none"
+      style="border-style:none; margin:0px;"
       class="mb-1" 
       v-for="book in $store.state.books" 
       :key="book.name">
@@ -93,6 +93,7 @@
     background-color:white;
     color:#696969;
     border-style:none;
+    height: 50px;
   }
 
   .caret_right{
@@ -104,11 +105,15 @@
     color:#696969; 
     border-style: none;
     height: 40px;
-    box-shadow: 5px 10px #DCDCDC; 
+    box-shadow: 5px 5px #DCDCDC; 
     margin-top:5px;
     margin-left:5px;
     margin-bottom:5px;
     margin-right:5px;
+   justify-content: center; 
+   align-items:center;
+   height:4em;
+   display:flex;
   }
 
 
