@@ -1,14 +1,14 @@
 <template>
 
 <!--This component will appear while isBible is true-->
-<div role="tablist" v-show="$store.state.mainView" :key="componentKey">
+<div role="tablist" v-show="mainView" :key="componentKey">
       
 <!-- Used Vue v-for directive to Loop through book names and create copies of outer card container.
     Each card will have a button with a unique key id to match its name--> 
   <b-card no-body 
       style="border-style:none; margin:0px;"
       class="mb-1" 
-      v-for="book in $store.state.books" 
+      v-for="book in books" 
       :key="book.name">
 
     <b-card-header 
@@ -53,6 +53,8 @@
 </template>
   
 <script>
+import {mapState} from 'vuex'
+
   export default{
   name: "BibleBook",
   data() {
@@ -62,9 +64,12 @@
     };
   },
 
-  mounted(){
-    this.$store.state.mainView;
-  },
+  computed: {
+    ...mapState([
+      'mainView',
+      'books',
+      ])
+    },
 
   methods:{
     async getVerses(bookName, chapterNum){

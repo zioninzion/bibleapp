@@ -1,7 +1,7 @@
 <template>
   <!--buttonVisible variable becomes true after Bible text is rendered. This
       ensures that all the buttons won't appear before the text does-->
-  <div v-show="$store.state.buttonVisible">
+  <div v-show="buttonVisible">
     <b-button
       class="return_button" 
       block variant="primary" 
@@ -25,7 +25,7 @@
     </div>
 
     <br>
-    <div v-if="$store.state.buttonVisible && $store.state.isChapter">
+    <div v-if="buttonVisible && isChapter">
       <transition name ="fade">
       <b-button-toolbar 
           class="center" 
@@ -67,7 +67,9 @@ import {mapState} from 'vuex'
 
   computed: {
     ...mapState([
-      'sections'
+      'sections',
+      'buttonVisible',
+      'isChapter',
       ])
     },
 
