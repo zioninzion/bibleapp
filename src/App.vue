@@ -75,7 +75,7 @@ export default {
   width:50%;
   color: white;
   height: 50px;
-  background-color: #2b3db0 !important;
+  background-color: #4F5378 !important;
   border-style:solid !important;
   border-width: thin !important;
   outline: none;
