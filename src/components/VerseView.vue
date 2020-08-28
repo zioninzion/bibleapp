@@ -25,7 +25,7 @@
     </div>
 
     <br>
-    <div v-if="buttonVisible && isChapter">
+    <div v-show="isChapter">
       <transition name ="fade">
       <b-button-toolbar 
           class="center" 
@@ -54,6 +54,10 @@
         </b-button-group>
       </b-button-toolbar>     
       </transition>
+    </div>
+    <div class="copyright">
+      Verses accessed from the Holy Bible Recovery Version (text-only edition) ©
+      2012 Living Stream Ministry www.lsm.org
     </div>
   </div>
 </template>
