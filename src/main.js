@@ -8,11 +8,11 @@ import axios from "axios";
 import store from "./store";
 import VueAnalytics from 'vue-analytics';
 Vue.config.productionTip = false;
-Vue.use(VueAnalytics, {id: 'UA-177240655-1'});
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.prototype.$http = axios;
 Vue.use(VueTouch);
+Vue.use(VueAnalytics, {id: 'UA-177240655-1'});
 
 new Vue({
   store: store,

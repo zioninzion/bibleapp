@@ -2,6 +2,7 @@
 
 import Vue from "vue";
 import Vuex from "vuex";
+import { analyticsMiddleware } from "vue-analytics"
 import plan from '@/store/plan.json';
 
 Vue.use(Vuex);
@@ -303,6 +304,9 @@ export default new Vuex.Store({
       state.buttonVisible = true
     }
   },
+  plugins: [
+    analyticsMiddleware
+  ]
   
 
 });
