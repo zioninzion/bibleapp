@@ -2,7 +2,7 @@
   <div v-show="$store.state.mainView">
     <div 
       v-for="(day, index) in days" :key="day.id" :ref="'day-ref-'+index">
-       <div class="row" @click="getVerseList(day.verses)">
+       <div class="row" @click="getVerseList(day)">
           <div class="date">
             <div class="date-header">{{day.date.toLocaleString('default', { month: 'long' })}}</div>
             <span>{{day.date.getDate()}}</span>
@@ -46,9 +46,7 @@ export default {
       var nextDate = new Date(key);
       for (var i = 0; i < verseList.length; i++) {
         var date = new Date(nextDate);
-        if (date.getFullYear() === todaysDate.getFullYear() &&
-            date.getMonth() === todaysDate.getMonth() &&
-            date.getDate()=== todaysDate.getDate()) {
+        if (date.toLocaleDateString() === todaysDate.toLocaleDateString()) {
           today = i
         }
         days.push({'date':date, 'verses':verseList[i]});
@@ -58,9 +56,14 @@ export default {
       this.today = today;
     },
 
-    getVerseList(verseList){          
+    getVerseList(day){
+      var verseList = day.verses
       this.$store.commit("PLAN_SELECTED")
       this.$store.dispatch("getVerseList", verseList);
+      this.$gtag.event('PLAN_SELECTED', {
+           'event_category' : 'Plans',
+           'event_label' : day.date.toLocaleDateString(),
+      });
     },
   },
 }

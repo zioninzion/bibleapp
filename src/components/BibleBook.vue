@@ -77,6 +77,10 @@ import {mapState} from 'vuex'
       await this.$store.dispatch("getVerses", {bookName, chapterNum})
       this.componentKey+=1 //Component id changes so that we can reload a fresh BibleBook 
                             // component that's been resetted to closed accordion view
+      this.$gtag.event('CHAPTER_SELECTED', {
+           'event_category' : 'Chapters',
+           'event_label' : `${bookName} ${chapterNum}`
+      });
     }
   },
 }

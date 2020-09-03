@@ -6,13 +6,13 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import axios from "axios";
 import store from "./store";
-import VueAnalytics from 'vue-analytics';
+import VueGtag from 'vue-gtag';
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.prototype.$http = axios;
 Vue.use(VueTouch);
-Vue.use(VueAnalytics, {id: 'UA-177240655-1'});
+Vue.use(VueGtag, {config: {id: 'UA-177240655-1'}});
 
 new Vue({
   store: store,
