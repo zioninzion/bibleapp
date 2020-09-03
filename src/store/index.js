@@ -20,6 +20,7 @@ export default new Vuex.Store({
     // data for plan, bibleBook, and verseView components
     sections: [],
     plan: plan,
+    today: 0,
     books: [
       { name: "Genesis", chapters: 50, abbrev: "Gen"},
       { name: "Exodus", chapters: 40, abbrev: "Exo"},
@@ -274,6 +275,10 @@ export default new Vuex.Store({
     RESET_Verses(state) {
       state.buttonVisible = false
       state.sections = []
+    },
+
+    SET_TODAYSREADING(state,today) {
+      state.today = today
     },
 
     SET_VERSES(state, section){

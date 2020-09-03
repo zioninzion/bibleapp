@@ -6,7 +6,8 @@
 
     <!--isVisible variable ensures that either the BibleBook or the Plan components will be visible at a time-->
     <button
-      class="buttontab"  
+      class="buttontab"
+      style="left:0"  
       v-on:click="show = true" 
       v-show="$store.state.mainView">
     
@@ -16,11 +17,11 @@
 
     <button 
       class="buttontab" 
-      v-on:click="show = false" 
+      v-on:click="show = false;readToday()" 
       v-show="$store.state.mainView">
       Reading Plan
     </button>
- 
+
     <!-- <transition name="fade"> -->
 
       <!--Use v-show instead of v-if for faster rendering-->
@@ -28,7 +29,7 @@
     <!-- </transition> -->
 
     <!-- <transition name="fade"> -->
-      <div v-show="!show"><Plan/><VerseView/></div>
+      <div v-show="!show"><Plan ref="plan-ref"/><VerseView/></div>
     <!-- </transition> -->
     
   </div>
@@ -50,6 +51,18 @@ export default {
    Plan,
    VerseView,
   },
+  methods: {
+    readToday() {
+        var element = this.$refs["plan-ref"].$refs["day-ref-"+this.$store.state.today];
+        this.$nextTick(function () {
+          var top = element[0].offsetTop;
+          window.scrollTo({
+            top: top,
+            behavior: 'smooth'
+          });
+        })
+    }
+  }
 }
 
 </script>
@@ -70,8 +83,13 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-
+div {
+  top:52px;
+}
 .buttontab{
+  position: fixed;
+  top:0;
+  z-index: 100;
   width:50%;
   color: white;
   height: 50px;

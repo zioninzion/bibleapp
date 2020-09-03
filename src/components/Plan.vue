@@ -1,9 +1,7 @@
 <template>
   <div v-show="$store.state.mainView">
-       <!-- v-if="day.date < currentDate" -->
-      
     <div 
-      v-for="day in days" :key="day.id">
+      v-for="(day, index) in days" :key="day.id" :ref="'day-ref-'+index">
        <div class="row" @click="getVerseList(day.verses)">
           <div class="date">
             <div class="date-header">{{day.date.toLocaleString('default', { month: 'long' })}}</div>
@@ -17,7 +15,6 @@
         <i class="caret_right fa fa-angle-right"></i>
         </div>
     </div>
-    
   </div>
 </template>
 
@@ -28,11 +25,13 @@ export default {
   data() {
     return {
       days: 0,
+      today: 0,
     };
   },
   
   mounted() { 
     this.loadPlans();
+    this.$store.commit("SET_TODAYSREADING", this.today)
   },
 
   methods:{
@@ -41,21 +40,28 @@ export default {
       var verseList = this.$store.state.plan[key];
       
       var days = []
+      var today = 0
 
-      var startDate = new Date(key);
-      var nextDate = startDate;
+      var todaysDate = new Date()
+      var nextDate = new Date(key);
       for (var i = 0; i < verseList.length; i++) {
         var date = new Date(nextDate);
+        if (date.getFullYear() === todaysDate.getFullYear() &&
+            date.getMonth() === todaysDate.getMonth() &&
+            date.getDate()=== todaysDate.getDate()) {
+          today = i
+        }
         days.push({'date':date, 'verses':verseList[i]});
         nextDate.setDate(nextDate.getDate() + 1);
       }
       this.days = days;
+      this.today = today;
     },
 
     getVerseList(verseList){          
       this.$store.commit("PLAN_SELECTED")
       this.$store.dispatch("getVerseList", verseList);
-    }
+    },
   },
 }
 
