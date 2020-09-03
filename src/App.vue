@@ -8,7 +8,7 @@
     <button
       class="buttontab"
       style="left:0"  
-      v-on:click="show = true" 
+      v-on:click="show = true;scrollTop()" 
       v-show="$store.state.mainView">
     
       Bible
@@ -52,6 +52,9 @@ export default {
    VerseView,
   },
   methods: {
+    scrollTop() {
+      window.scrollTo(0,0);
+    },
     readToday() {
         var element = this.$refs["plan-ref"].$refs["day-ref-"+this.$store.state.today];
         this.$nextTick(function () {
