@@ -8,7 +8,7 @@ import axios from "axios";
 import store from "./store";
 import VueAnalytics from 'vue-analytics';
 Vue.config.productionTip = false;
-Vue.use(VueAnalytics, {id: 'G-H9167Q4F3T'});
+Vue.use(VueAnalytics, {id: 'UA-177240655-1'});
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.prototype.$http = axios;
