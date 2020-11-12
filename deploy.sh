@@ -4,6 +4,7 @@ eval $(ssh-agent -s)
 
 #add default ssh 
 ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_ed25519
 
 # abort on errors
 set -e
