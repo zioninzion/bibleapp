@@ -25,27 +25,27 @@
     </div>
 
     <br>
-    <div v-show="isChapter">
+    <div v-show="isChapter" class="navbuttons">
       <transition name ="fade">
       <b-button-toolbar 
           class="center" 
           key-nav aria-label="Toolbar with button groups">
         <b-button-group class="mx-1">
-          <b-button class="rounded" 
+          <b-button pill class="rounded" 
             v-on:click.passive="navigate('previousBook');">&laquo;
           </b-button>
         
-          <b-button class="rounded" 
+          <b-button pill class="rounded" 
             v-on:click.passive="navigate('previousChapter');">&lsaquo;
           </b-button>
         </b-button-group>
         
         <b-button-group class="mx-2">
-          <b-button class="rounded" 
+          <b-button pill class="rounded" 
             v-on:click.passive="navigate('nextChapter');">&rsaquo;
           </b-button>
         
-          <b-button class="rounded" 
+          <b-button pill class="rounded" 
             v-on:click.passive="navigate('nextBook');">&raquo;
           </b-button>
         </b-button-group>
@@ -94,9 +94,19 @@ import {mapState} from 'vuex'
         if (chapterNum != 1) {
           chapterNum -= 1
         }
-        else {
-          this.navigate('previousBook')
-          return
+        
+	else if (bookName=='Genesis' && chapterNum == 1){
+	
+	bookName = 'Revelation'
+	chapterNum = 22
+	}
+	else {
+	index -= 1
+            bookName = books[index].name
+            chapterNum = 1
+          chapterNum = books[index].chapters
+
+          
         }
 	break; 
       case 'nextChapter':
@@ -104,21 +114,34 @@ import {mapState} from 'vuex'
         if (chapterNum != totalChapters) {
           chapterNum += 1
         }
-        else {
-          this.navigate('nextBook')
-          return
+        
+        else if (bookName == 'Revelation' && chapterNum==books[index].chapters){
+		bookName = 'Genesis'
+		chapterNum = 1
+
+	}
+	else {
+          
+            index += 1
+            bookName = books[index].name
+            chapterNum = 1
+ 
         }
       break;
       case 'previousBook':
         // If not Genesis go to previous book
-        if (bookName != 'Genesis') {
+        if(bookName == 'Genesis') {
+            bookName = 'Revelation'
+          chapterNum = 1
+          }
+
+	else{
           index -= 1
           bookName = books[index].name
           chapterNum = 1
+	//chapterNum = books[index].chapters
         }
-        else {
-          return
-        }
+
       break;
       case 'nextBook': 
         // If not Revelation go to next book
@@ -127,8 +150,10 @@ import {mapState} from 'vuex'
           bookName = books[index].name
           chapterNum = 1
         }
+	// If book is Revelation go to Genesis
         else {
-          return
+          bookName = 'Genesis'
+	chapterNum = 1
         }
       }
       this.$store.commit('CHAPTER_SELECTED', {bookName, chapterNum})
@@ -152,20 +177,14 @@ import {mapState} from 'vuex'
        opacity: 0;
      }
 
-
-.center {
-  display:flex;
-  /*justify-content:center;*/
-  align-items:center;
-  margin-bottom:10px;
+div.navbuttons
+{
   position: fixed;
-  bottom: -300px;
+  bottom: 60px;
+  display:flex;
+  align-items:flex-end;
+  left: 15px;
 }
-
-.mx-1{
-left:10px;
-}
-
 
 .mx-2{
 left:175px;
@@ -175,7 +194,7 @@ left:175px;
   background-color:gray;
   color:white;
   border-style:none;
-  height: 36px;
+  height: 42px;
   position: sticky;
   top: 0;
 }
