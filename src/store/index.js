@@ -1,16 +1,15 @@
 // store/index.js
-
+import axios from "axios";
 import Vue from "vue";
 import Vuex from "vuex";
-import plan from '@/store/plan.json';
+import plan from '../store/plan.json';
 
 Vue.use(Vuex);
 
-const axios = require("axios");
-
+//const axios = require("axios");
 export default new Vuex.Store({
   state: {
-    // Visibilty states
+    // Visibilty states    
     mainView: true,
     isChapter: false,
     buttonVisible: false,

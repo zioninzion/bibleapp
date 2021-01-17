@@ -30,25 +30,22 @@
       <b-button-toolbar 
           class="center" 
           key-nav aria-label="Toolbar with button groups">
-        <b-button-group class="mx-1" 
-          style="padding-right:50px;">
-          <b-button 
-            style="margin-right:10px;" 
+        <b-button-group class="mx-1">
+          <b-button class="rounded" 
             v-on:click.passive="navigate('previousBook');">&laquo;
           </b-button>
         
-          <b-button 
+          <b-button class="rounded" 
             v-on:click.passive="navigate('previousChapter');">&lsaquo;
           </b-button>
         </b-button-group>
         
-        <b-button-group class="mx-1">
-          <b-button 
-            style="margin-right:10px;" 
+        <b-button-group class="mx-2">
+          <b-button class="rounded" 
             v-on:click.passive="navigate('nextChapter');">&rsaquo;
           </b-button>
         
-          <b-button 
+          <b-button class="rounded" 
             v-on:click.passive="navigate('nextBook');">&raquo;
           </b-button>
         </b-button-group>
@@ -57,7 +54,7 @@
     </div>
     <div class="copyright">
       Verses accessed from the Holy Bible Recovery Version (text-only edition) ©
-      2012 Living Stream Ministry www.lsm.org
+      2021 Living Stream Ministry www.lsm.org
     </div>
   </div>
 </template>
@@ -158,16 +155,33 @@ import {mapState} from 'vuex'
 
 .center {
   display:flex;
-  justify-content:center;
+  /*justify-content:center;*/
   align-items:center;
   margin-bottom:10px;
+  position: fixed;
+  bottom: -300px;
+}
+
+.mx-1{
+left:10px;
+}
+
+
+.mx-2{
+left:175px;
 }
 
 .return_button{
   background-color:gray;
   color:white;
   border-style:none;
-  height: 48px;
+  height: 36px;
+  position: sticky;
+  top: 0;
+}
+
+.rounded{
+margin-right: 10px;
 }
 
 button{

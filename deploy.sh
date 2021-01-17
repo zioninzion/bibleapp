@@ -10,7 +10,7 @@ ssh-add ~/.ssh/id_ed25519
 set -e
 
 # build
-npm run build
+yarn run build
 
 # navigate into the build output directory
 cd dist
