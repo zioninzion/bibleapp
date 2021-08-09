@@ -237,11 +237,23 @@ export default new Vuex.Store({
           // Find then remove all verses that do not exist: "No such verse..."
           for (var index = 0; index < data.verses.length; index++) {
             var verse = data.verses[index];
+
             if (verse.ref != "Rom. 16:24" && verse.ref != "Mark 9:44" && verse.ref != "Mark 9:46") {
               verse.text = verse.text.replace(/\[/g, "").replace(/\]/g, "")
             }
+
             if (verse.text.startsWith("No such verse")) {
+              next = end
               break
+            }
+
+            // Add catchup days ie when reference does not work supply this verse
+            if (verse.text.startsWith("No such ref")) {
+              if (title.slice(-3, -1) == " 1") {
+                title = title.slice(0, -2)
+              }
+              verse.text = "Enjoy my fav verse :) Phil. 4:19 And my God will fill your every need according to His riches, in glory, in Christ Jesus."
+              next = end
             }
           }
           data.verses = data.verses.slice(0, index)
