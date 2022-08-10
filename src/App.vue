@@ -1,23 +1,23 @@
 <template>
   <div id="app">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!--isVisible variable ensures that either the BibleBook or the Plan components will be visible at a time-->
     <button
       class="buttontab"
-      style="left:0"  
-      v-on:click="show = true;scrollTop()" 
+      style="left:0"
+      v-on:click="show = true;scrollTop()"
       v-show="$store.state.mainView">
-    
+
       Bible
-     
+
     </button>
 
-    <button 
-      class="buttontab" 
-      v-on:click="show = false;readToday()" 
+    <button
+      class="buttontab"
+      v-on:click="show = false;readToday()"
       v-show="$store.state.mainView">
       Reading Plan
     </button>
@@ -29,44 +29,44 @@
     <!-- </transition> -->
 
     <!-- <transition name="fade"> -->
-      <div v-show="!show"><Plan ref="plan-ref"/><VerseView/></div>
+      <div v-show="!show"><YearlyPlan ref="plan-ref"/><VerseView/></div>
     <!-- </transition> -->
-    
+
   </div>
 </template>
 
 <script>
-import BibleBook from './components/BibleBook.vue'
-import Plan from './components/Plan.vue'
-import VerseView from './components/VerseView.vue'
+import BibleBook from './components/BibleBook.vue';
+import YearlyPlan from './components/YearlyPlan.vue';
+import VerseView from './components/VerseView.vue';
 export default {
   name: 'App',
-  data:function(){
-    return{
-    show: true
-    }
+  data: function() {
+    return {
+      show: true,
+    };
   },
   components: {
-   BibleBook,
-   Plan,
-   VerseView,
+    BibleBook,
+    YearlyPlan,
+    VerseView,
   },
   methods: {
     scrollTop() {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     },
     readToday() {
-        var element = this.$refs["plan-ref"].$refs["day-ref-"+this.$store.state.today];
-        this.$nextTick(function () {
-          var top = element[0].offsetTop;
-          window.scrollTo({
-            top: top,
-            behavior: 'smooth'
-          });
-        })
-    }
-  }
-}
+      const element = this.$refs['plan-ref'].$refs['day-ref-'+this.$store.state.today];
+      this.$nextTick(function() {
+        const top = element[0].offsetTop;
+        window.scrollTo({
+          top: top,
+          behavior: 'smooth',
+        });
+      });
+    },
+  },
+};
 
 </script>
 

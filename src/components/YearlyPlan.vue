@@ -1,6 +1,6 @@
 <template>
   <div v-show="$store.state.mainView">
-    <div 
+    <div
       v-for="(day, index) in days" :key="day.id" :ref="'day-ref-'+index">
        <div class="row" @click="getVerseList(day)">
           <div class="date">
@@ -21,52 +21,52 @@
 
 <script>
 export default {
-  name:"Plan",
+  name: 'YearlyPlan',
   data() {
     return {
       days: 0,
       today: 0,
     };
   },
-  
-  mounted() { 
+
+  mounted() {
     this.loadPlans();
-    this.$store.commit("SET_TODAYSREADING", this.today)
+    this.$store.commit('SET_TODAYSREADING', this.today);
   },
 
-  methods:{
-    loadPlans()  {
-      var key = Object.keys(this.$store.state.plan)[0]
-      var verseList = this.$store.state.plan[key];
-      
-      var days = []
-      var today = 0
+  methods: {
+    loadPlans() {
+      const key = Object.keys(this.$store.state.plan)[0];
+      const verseList = this.$store.state.plan[key];
 
-      var todaysDate = new Date()
-      var nextDate = new Date(key);
-      for (var i = 0; i < verseList.length; i++) {
-        var date = new Date(nextDate);
+      const days = [];
+      let today = 0;
+
+      const todaysDate = new Date();
+      const nextDate = new Date(key);
+      for (let i = 0; i < verseList.length; i++) {
+        const date = new Date(nextDate);
         if (date.toLocaleDateString() === todaysDate.toLocaleDateString()) {
-          today = i
+          today = i;
         }
-        days.push({'date':date, 'verses':verseList[i]});
+        days.push({'date': date, 'verses': verseList[i]});
         nextDate.setDate(nextDate.getDate() + 1);
       }
       this.days = days;
       this.today = today;
     },
 
-    getVerseList(day){
-      var verseList = day.verses
-      this.$store.commit("PLAN_SELECTED")
-      this.$store.dispatch("getVerseList", verseList);
+    getVerseList(day) {
+      const verseList = day.verses;
+      this.$store.commit('PLAN_SELECTED');
+      this.$store.dispatch('getVerseList', verseList);
       this.$gtag.event('PLAN_SELECTED', {
-           'event_category' : 'Plans',
-           'event_label' : day.date.toLocaleDateString(),
+        'event_category': 'Plans',
+        'event_label': day.date.toLocaleDateString(),
       });
     },
   },
-}
+};
 
 
 </script>

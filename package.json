@@ -14,19 +14,20 @@
     "bootstrap-vue": "^2.16.0",
     "core-js": "^3.6.5",
     "gh-pages": "^2.2.0",
-    "vue": "^2.6.11",
-    "vue-cli": "^2.9.6",
+    "vue": "^2.7.8",
+    "vue-cli": "^1.2.0",
     "vue-gtag": "^1.9.0",
     "vue-touch": "^2.0.0-beta.4",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.4",
-    "@vue/cli-plugin-eslint": "^4.5.4",
-    "@vue/cli-service": "^4.5.4",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "eslint": "^8.21.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-vue": "^9.3.0",
     "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {
