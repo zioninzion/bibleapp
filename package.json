@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "bootstrap-vue": "^2.16.0",
     "core-js": "^3.6.5",
+    "exceljs": "^4.3.0",
     "gh-pages": "^2.2.0",
     "vue": "^2.7.8",
     "vue-cli": "^1.2.0",

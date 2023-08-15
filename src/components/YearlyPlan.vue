@@ -36,7 +36,9 @@ export default {
 
   methods: {
     loadPlans() {
+      // Grab array content from the json file 
       const key = Object.keys(this.$store.state.plan)[0];
+      // 
       const verseList = this.$store.state.plan[key];
 
       const days = [];
