@@ -54,7 +54,7 @@
     </div>
     <div class="copyright">
       Verses accessed from the Holy Bible Recovery Version (text-only edition) ©
-      2023 Living Stream Ministry www.lsm.org
+      2024 Living Stream Ministry www.lsm.org
     </div>
   </div>
 </template>
