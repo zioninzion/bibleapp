@@ -2,56 +2,45 @@
   <!--buttonVisible variable becomes true after Bible text is rendered. This
       ensures that all the buttons won't appear before the text does-->
   <div v-show="buttonVisible">
-    <b-button
-      class="return_button"
-      block variant="primary"
-      v-on:click="reloadPage()">
+    <b-button class="return_button" block variant="primary" v-on:click="reloadPage()">
       <i class="fa fa-angle-left" style="float:left"></i>
-    Main Page
+      Main Page
     </b-button>
 
     <br>
     <div v-for="section in sections" :key="section.id">
       <span v-if="section.title != ''">
-    <h3>{{section.title}}</h3>
-    </span>
-    <p
-      style=""
-      v-for="(verse, i) in section.verses"
-      :key="i+verse.ref">
-      <sup>{{verse.ref.split(':')[1]}}</sup>
-      {{" "+ verse.text}}
-    </p>
+        <h3>{{section.title}}</h3>
+      </span>
+      <p style="" v-for="(verse, i) in section.verses" :key="i+verse.ref">
+        <sup>{{verse.ref.split(':')[1]}}</sup>
+        {{" "+ verse.text}}
+      </p>
     </div>
 
     <br>
     <div v-show="isChapter" class="navbuttons">
-      <transition name ="fade">
-      <b-button-toolbar
-          class="center"
-          key-nav aria-label="Toolbar with button groups">
-        <b-button-group class="mx-1">
-          <b-button pill class="rounded"
-            v-on:click.passive="navigate('previousBook');">&laquo;
-          </b-button>
+      <transition name="fade">
+        <b-button-toolbar class="center" key-nav aria-label="Toolbar with button groups">
+          <b-button-group class="mx-1">
+            <b-button pill class="rounded" v-on:click.passive="navigate('previousBook');">&laquo;
+            </b-button>
 
-          <b-button pill class="rounded"
-            v-on:click.passive="navigate('previousChapter');">&lsaquo;
-          </b-button>
-        </b-button-group>
+            <b-button pill class="rounded" v-on:click.passive="navigate('previousChapter');">&lsaquo;
+            </b-button>
+          </b-button-group>
 
-        <b-button-group class="mx-2">
-          <b-button pill class="rounded"
-            v-on:click.passive="navigate('nextChapter');">&rsaquo;
-          </b-button>
+          <b-button-group class="mx-2">
+            <b-button pill class="rounded" v-on:click.passive="navigate('nextChapter');">&rsaquo;
+            </b-button>
 
-          <b-button pill class="rounded"
-            v-on:click.passive="navigate('nextBook');">&raquo;
-          </b-button>
-        </b-button-group>
-      </b-button-toolbar>
+            <b-button pill class="rounded" v-on:click.passive="navigate('nextBook');">&raquo;
+            </b-button>
+          </b-button-group>
+        </b-button-toolbar>
       </transition>
     </div>
+    <h1><u><a href="http://5.161.111.178:8000/">Mark as completed!</a></u></h1>
     <div class="copyright">
       Verses accessed from the Holy Bible Recovery Version (text-only edition) ©
       2024 Living Stream Ministry www.lsm.org
